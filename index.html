@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#f5f5f2" />
+  <title>Travel Places Demo</title>
+  <style>
+    :root {
+      --bg: #f5f5f2;
+      --surface: rgba(255, 255, 255, 0.82);
+      --surface-strong: #ffffff;
+      --text: #121212;
+      --muted: #6f6f6f;
+      --line: rgba(18, 18, 18, 0.1);
+      --line-strong: rgba(18, 18, 18, 0.16);
+      --shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --accent: #121212;
+      --chip: rgba(18, 18, 18, 0.05);
+      --chip-active: #121212;
+      --chip-active-text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100svh;
+      position: relative;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.9), rgba(245, 245, 242, 0) 40%),
+        linear-gradient(180deg, #f8f8f6 0%, #f2f2ef 100%);
+      overflow: hidden;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+      padding: calc(var(--safe-top) + 18px) 18px calc(var(--safe-bottom) + 94px);
+      animation: fadeIn 0.22s ease;
+    }
+
+    .screen.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .chrome {
+      position: sticky;
+      top: calc(-1 * var(--safe-top) - 18px);
+      z-index: 20;
+      padding-top: calc(var(--safe-top) + 18px);
+      margin: calc(-1 * var(--safe-top) - 18px) -18px 12px;
+      padding-inline: 18px;
+      background: linear-gradient(180deg, rgba(245, 245, 242, 0.96) 0%, rgba(245, 245, 242, 0.88) 72%, rgba(245, 245, 242, 0) 100%);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .page-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .back-button {
+      position: absolute;
+      inset-inline-start: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    }
+
+    .back-button span:last-child {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    html[dir="rtl"] .back-button {
+      flex-direction: row-reverse;
+    }
+
+    .hero {
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0 0 6px;
+      font-size: 32px;
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px 16px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+      margin-bottom: 16px;
+    }
+
+    .search svg {
+      width: 18px;
+      height: 18px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .search input {
+      border: 0;
+      outline: 0;
+      width: 100%;
+      background: transparent;
+      color: var(--text);
+      font-size: 15px;
+    }
+
+    .search input::placeholder {
+      color: #8b8b8b;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .card-button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      text-align: start;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-button:active {
+      transform: scale(0.985);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .region-card {
+      min-height: 202px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .country-card {
+      min-height: 198px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(180deg, color-mix(in srgb, var(--tint, #ffffff) 82%, #ffffff 18%), rgba(255,255,255,0.92));
+    }
+
+    .image-wrap {
+      height: 132px;
+      border-radius: 18px;
+      background: rgba(18, 18, 18, 0.03);
+      border: 1px solid rgba(18, 18, 18, 0.05);
+      display: grid;
+      place-items: center;
+      padding: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .card-title {
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .card-subtitle {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .pill {
+      position: absolute;
+      top: 12px;
+      inset-inline-end: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: rgba(18, 18, 18, 0.86);
+      color: #ffffff;
+      padding: 7px 9px;
+      border-radius: 999px;
+    }
+
+    .section-panel {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 22px 18px;
+    }
+
+    .section-panel h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .section-panel p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 11px 10px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+
+    .tab-button.active {
+      background: var(--chip-active);
+      color: var(--chip-active-text);
+      border-color: transparent;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .place-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.82);
+      border-radius: 22px;
+      padding: 14px;
+      text-align: start;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .place-logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      overflow: hidden;
+      flex-shrink: 0;
+      border: 1px solid rgba(18, 18, 18, 0.08);
+      background: rgba(18, 18, 18, 0.03);
+      display: grid;
+      place-items: center;
+      padding: 10px;
+    }
+
+    .place-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .place-meta {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .place-name {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stars {
+      letter-spacing: 0.08em;
+      color: #121212;
+      font-size: 12px;
+    }
+
+    .place-chevron {
+      flex-shrink: 0;
+      color: var(--muted);
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .detail-card {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .detail-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .detail-logo {
+      width: 76px;
+      height: 76px;
+      border-radius: 22px;
+      border: 1px solid rgba(18, 18, 18, 0.08);
+      background: rgba(18, 18, 18, 0.03);
+      display: grid;
+      place-items: center;
+      padding: 12px;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .detail-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .detail-title {
+      font-size: 24px;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+      margin: 0 0 6px;
+    }
+
+    .detail-copy {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--muted);
+      margin: 0 0 16px;
+    }
+
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      background: #121212;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .section-heading {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0 0 10px;
+    }
+
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.78);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .accordion-button {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      padding: 16px;
+      text-align: start;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .accordion-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .accordion-meta {
+      margin-top: 4px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .accordion-icon {
+      font-size: 20px;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: transform 0.18s ease;
+    }
+
+    .accordion-item.open .accordion-icon {
+      transform: rotate(45deg);
+    }
+
+    .accordion-panel {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .accordion-item.open .accordion-panel {
+      display: block;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
+      margin-bottom: 14px;
+    }
+
+    .gallery-card {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(18, 18, 18, 0.08);
+      background: rgba(18, 18, 18, 0.03);
+      aspect-ratio: 1 / 1;
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .mini-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .maps-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      background: rgba(18, 18, 18, 0.03);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .floating-lang {
+      position: fixed;
+      inset-inline-end: 18px;
+      bottom: calc(var(--safe-bottom) + 18px);
+      z-index: 40;
+      border: 1px solid var(--line);
+      background: rgba(18, 18, 18, 0.92);
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 13px 16px;
+      min-width: 64px;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+
+    .empty-state {
+      border: 1px dashed var(--line-strong);
+      border-radius: var(--radius-xl);
+      padding: 26px 18px;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .empty-state h3 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .empty-state p {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .muted-note {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+      margin-top: 14px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 360px) {
+      .hero h1 {
+        font-size: 28px;
+      }
+
+      .grid {
+        gap: 12px;
+      }
+
+      .region-card,
+      .country-card {
+        min-height: 186px;
+      }
+
+      .image-wrap {
+        height: 118px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <section id="screen-regions" class="screen active">
+      <div class="chrome">
+        <div class="topbar">
+          <div class="page-label" id="regions-page-label">Travel Places</div>
+        </div>
+        <div class="hero">
+          <h1 id="regions-hero-title"></h1>
+          <p id="regions-hero-copy"></p>
+        </div>
+        <label class="search" aria-label="Search regions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="region-search" type="text" />
+        </label>
+      </div>
+      <div id="regions-grid" class="grid"></div>
+    </section>
+
+    <section id="screen-countries" class="screen">
+      <div class="chrome">
+        <div class="topbar">
+          <button id="back-to-regions" class="back-button" type="button">
+            <span>←</span>
+            <span id="back-to-regions-text"></span>
+          </button>
+          <div class="page-label" id="countries-page-label"></div>
+        </div>
+        <div class="hero">
+          <h1 id="countries-hero-title"></h1>
+          <p id="countries-hero-copy"></p>
+        </div>
+        <label class="search" aria-label="Search countries">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="country-search" type="text" />
+        </label>
+      </div>
+      <div id="countries-content"></div>
+    </section>
+
+    <section id="screen-places" class="screen">
+      <div class="chrome">
+        <div class="topbar">
+          <button id="back-to-countries" class="back-button" type="button">
+            <span>←</span>
+            <span id="back-to-countries-text"></span>
+          </button>
+          <div class="page-label" id="places-page-label"></div>
+        </div>
+        <div class="hero">
+          <h1 id="places-hero-title"></h1>
+          <p id="places-hero-copy"></p>
+        </div>
+        <label class="search" aria-label="Search places">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="place-search" type="text" />
+        </label>
+        <div id="category-tabs" class="tabs"></div>
+      </div>
+      <div id="places-content"></div>
+    </section>
+
+    <section id="screen-details" class="screen">
+      <div class="chrome">
+        <div class="topbar">
+          <button id="back-to-places" class="back-button" type="button">
+            <span>←</span>
+            <span id="back-to-places-text"></span>
+          </button>
+          <div class="page-label" id="details-page-label"></div>
+        </div>
+      </div>
+      <div id="details-content"></div>
+    </section>
+  </div>
+
+  <button id="language-toggle" class="floating-lang" type="button">EN</button>
+
+  <script>
+    const translations = {
+      en: {
+        appLabel: 'Travel Places',
+        regionsTitle: 'Find places by region',
+        regionsCopy: 'Start with a region, then drill down into countries, categories, and specific places.',
+        countriesLabel: 'Countries',
+        countriesCopyActive: 'Pick a country to continue.',
+        countriesCopySoon: 'This region is planned, but it is not populated in this demo yet.',
+        placesLabel: 'Places',
+        placesCopyActive: 'Browse places in Kuwait City by category.',
+        placesCopySoon: 'This country is planned, but the content is not available in this demo yet.',
+        detailsLabel: 'Place details',
+        back: 'Back',
+        comingSoon: 'Coming soon',
+        searchRegions: 'Search regions',
+        searchCountries: 'Search countries',
+        searchPlaces: 'Search places',
+        noResults: 'No results found.',
+        noResultsCopy: 'Try another search term.',
+        malls: 'Malls',
+        cafe: 'Cafe',
+        restaurant: 'Restaurant',
+        officialWebsite: 'Official website',
+        locations: 'Locations',
+        rating: 'Rating',
+        openMaps: 'Open in Google Maps',
+        locationTitle: 'Available locations',
+        regionSoonTitle: 'This region is not live yet',
+        regionSoonCopy: 'Only Middle East is populated in this first demo.',
+        countrySoonTitle: 'This country is not live yet',
+        countrySoonCopy: 'Only Kuwait is populated in this first demo.',
+        demoNote: 'Middle East and Kuwait are the active demo flow right now.',
+        starsOutOfFive: 'out of 5 stars',
+        locationCount: 'locations'
+      },
+      ar: {
+        appLabel: 'أماكن السفر',
+        regionsTitle: 'ابحث عن أماكن حسب المنطقة',
+        regionsCopy: 'ابدأ بالمنطقة، ثم انتقل إلى الدولة، ثم الفئة، ثم تفاصيل المكان.',
+        countriesLabel: 'الدول',
+        countriesCopyActive: 'اختر دولة للمتابعة.',
+        countriesCopySoon: 'هذه المنطقة مخطط لها، لكنها غير مفعلة في هذه النسخة التجريبية.',
+        placesLabel: 'أماكن',
+        placesCopyActive: 'تصفح أماكن مدينة الكويت حسب الفئة.',
+        placesCopySoon: 'هذه الدولة مخطط لها، لكن المحتوى غير متوفر في هذه النسخة التجريبية.',
+        detailsLabel: 'تفاصيل المكان',
+        back: 'رجوع',
+        comingSoon: 'قريباً',
+        searchRegions: 'ابحث عن منطقة',
+        searchCountries: 'ابحث عن دولة',
+        searchPlaces: 'ابحث عن مكان',
+        noResults: 'لا توجد نتائج.',
+        noResultsCopy: 'جرّب كلمة بحث مختلفة.',
+        malls: 'مولات',
+        cafe: 'مقاهي',
+        restaurant: 'مطاعم',
+        officialWebsite: 'الموقع الرسمي',
+        locations: 'المواقع',
+        rating: 'التقييم',
+        openMaps: 'افتح في خرائط جوجل',
+        locationTitle: 'المواقع المتاحة',
+        regionSoonTitle: 'هذه المنطقة غير مفعلة بعد',
+        regionSoonCopy: 'الشرق الأوسط فقط هو المفعّل في النسخة الأولى.',
+        countrySoonTitle: 'هذه الدولة غير مفعلة بعد',
+        countrySoonCopy: 'الكويت فقط هي المفعلة في النسخة الأولى.',
+        demoNote: 'الشرق الأوسط والكويت هما مسار النسخة التجريبية الحالي.',
+        starsOutOfFive: 'من 5 نجوم',
+        locationCount: 'مواقع'
+      }
+    };
+
+    const regions = [
+      { id: 'middle_east', name: 'Middle East', nameAr: 'الشرق الأوسط', image: 'middle_east.png', active: true },
+      { id: 'europe', name: 'Europe', nameAr: 'أوروبا', image: 'europe.png', active: false },
+      { id: 'north_africa', name: 'North Africa', nameAr: 'شمال أفريقيا', image: 'north_africa.png', active: false },
+      { id: 'united_states', name: 'United States', nameAr: 'الولايات المتحدة', image: 'united_states.png', active: false },
+      { id: 'russia', name: 'Russia', nameAr: 'روسيا', image: 'russia.png', active: false },
+      { id: 'latin_america', name: 'Latin America', nameAr: 'أمريكا اللاتينية', image: 'latin_america.png', active: false }
+    ];
+
+    const countriesByRegion = {
+      middle_east: [
+        { id: 'kuwait', name: 'Kuwait', nameAr: 'الكويت', image: 'kuwait.png', tint: '#eef4ee', active: true },
+        { id: 'saudi_arabia', name: 'Saudi Arabia', nameAr: 'السعودية', image: 'saudi_arabia.png', tint: '#e4f2e7', active: false },
+        { id: 'qatar', name: 'Qatar', nameAr: 'قطر', image: 'qatar.png', tint: '#f5edf3', active: false },
+        { id: 'uae', name: 'United Arab Emirates', nameAr: 'الإمارات', image: 'uae.png', tint: '#eef7f2', active: false },
+        { id: 'bahrain', name: 'Bahrain', nameAr: 'البحرين', image: 'bahrain.png', tint: '#f8ecec', active: false },
+        { id: 'oman', name: 'Oman', nameAr: 'عُمان', image: 'oman.png', tint: '#f6efe8', active: false },
+        { id: 'jordan', name: 'Jordan', nameAr: 'الأردن', image: 'jordan.png', tint: '#f2f2f2', active: false },
+        { id: 'lebanon', name: 'Lebanon', nameAr: 'لبنان', image: 'lebanon.png', tint: '#eef5ef', active: false },
+        { id: 'iraq', name: 'Iraq', nameAr: 'العراق', image: 'iraq.png', tint: '#f5f1ef', active: false },
+        { id: 'syria', name: 'Syria', nameAr: 'سوريا', image: 'syria.png', tint: '#f4f4f4', active: false },
+        { id: 'turkey', name: 'Turkey', nameAr: 'تركيا', image: 'turkey.png', tint: '#f8eded', active: false }
+      ]
+    };
+
+    const placesByCountry = {
+      kuwait: {
+        malls: [
+          {
+            id: 'arraya_centre',
+            name: 'Arraya Centre',
+            nameAr: 'مركز الراية',
+            logo: 'arraya_centre_logo.png',
+            rating: 4.6,
+            description: 'Upscale shopping and dining destination in the Sharq district of Kuwait City.',
+            descriptionAr: 'وجهة راقية للتسوق والمطاعم في منطقة شرق بمدينة الكويت.',
+            website: 'https://www.arraya-centre.com/',
+            locations: [
+              {
+                id: 'arraya-sharq',
+                name: 'Sharq, Kuwait City',
+                nameAr: 'شرق، مدينة الكويت',
+                rating: 4.6,
+                maps: 'https://www.google.com/maps/search/?api=1&query=Arraya+Centre+Kuwait+City',
+                images: ['arraya_centre_1.png', 'arraya_centre_2.png']
+              }
+            ]
+          },
+          {
+            id: 'salhia',
+            name: 'Salhia Commercial Complex',
+            nameAr: 'مجمع الصالحية التجاري',
+            logo: 'salhia_logo.png',
+            rating: 4.5,
+            description: 'Long-established luxury shopping complex in central Kuwait City.',
+            descriptionAr: 'مجمع تسوق فاخر وعريق في وسط مدينة الكويت.',
+            website: 'https://www.salhia-complex.com/',
+            locations: [
+              {
+                id: 'salhia-city',
+                name: 'Salhiya, Kuwait City',
+                nameAr: 'الصالحية، مدينة الكويت',
+                rating: 4.5,
+                maps: 'https://www.google.com/maps/search/?api=1&query=Salhia+Commercial+Complex+Kuwait+City',
+                images: ['salhia_1.png', 'salhia_2.png']
+              }
+            ]
+          }
+        ],
+        cafe: [
+          {
+            id: 'arabica',
+            name: '% Arabica',
+            nameAr: '٪ أرابيكا',
+            logo: 'arabica_logo.png',
+            rating: 4.7,
+            description: 'Minimalist specialty coffee spot known for espresso-based drinks and a clean design identity.',
+            descriptionAr: 'مقهى قهوة مختصة بطابع بسيط وحديث، معروف بمشروبات الإسبريسو وتصميمه النظيف.',
+            website: 'https://arabica.com/location/arabica-kuwait-arraya-plaza/',
+            locations: [
+              {
+                id: 'arabica-arraya',
+                name: 'Arraya Plaza, Sharq',
+                nameAr: 'ساحة الراية، شرق',
+                rating: 4.7,
+                maps: 'https://www.google.com/maps/search/?api=1&query=%25+Arabica+Arraya+Plaza+Kuwait+City',
+                images: ['arabica_arraya_1.png', 'arabica_arraya_2.png']
+              }
+            ]
+          },
+          {
+            id: 'caribou',
+            name: 'Caribou Coffee',
+            nameAr: 'كاريبو كوفي',
+            logo: 'caribou_coffee_logo.png',
+            rating: 4.4,
+            description: 'International coffee chain serving espresso drinks, brewed coffee, desserts, and quick bites.',
+            descriptionAr: 'سلسلة قهوة عالمية تقدم مشروبات الإسبريسو والقهوة والحلويات والوجبات السريعة الخفيفة.',
+            website: 'https://www.cariboucoffee.com/around-the-world/',
+            locations: [
+              {
+                id: 'caribou-arraya',
+                name: 'Arraya Centre, Sharq',
+                nameAr: 'مركز الراية، شرق',
+                rating: 4.4,
+                maps: 'https://www.google.com/maps/search/?api=1&query=Caribou+Coffee+Arraya+Centre+Kuwait+City',
+                images: ['caribou_arraya_1.png', 'caribou_arraya_2.png']
+              }
+            ]
+          },
+          {
+            id: 'tobys',
+            name: "Toby's Coffee",
+            nameAr: 'توبيز كوفي',
+            logo: 'tobys_coffee_logo.png',
+            rating: 4.5,
+            description: 'Specialty coffee stop for espresso, filter coffee, and a casual coffee break in the city.',
+            descriptionAr: 'محطة قهوة مختصة للإسبريسو والقهوة المقطرة واستراحة هادئة داخل المدينة.',
+            website: 'https://kw.tobysestateme.com/select/branch',
+            locations: [
+              {
+                id: 'tobys-arraya',
+                name: 'Arraya Centre, Sharq',
+                nameAr: 'مركز الراية، شرق',
+                rating: 4.5,
+                maps: 'https://www.google.com/maps/search/?api=1&query=Toby%27s+Coffee+Arraya+Centre+Kuwait+City',
+                images: ['tobys_arraya_1.png', 'tobys_arraya_2.png']
+              }
+            ]
+          }
+        ],
+        restaurant: [
+          {
+            id: 'white_robata',
+            name: 'White Robata',
+            nameAr: 'وايت روباتا',
+            logo: 'white_robata_logo.png',
+            rating: 4.7,
+            description: 'Contemporary Japanese robata restaurant with a refined dining atmosphere.',
+            descriptionAr: 'مطعم ياباني معاصر بطابع روباتا وأجواء راقية.',
+            website: 'https://www.whiterobata.com/',
+            locations: [
+              {
+                id: 'white-robata-jacc',
+                name: 'Sheikh Jaber Al Ahmad Cultural Centre',
+                nameAr: 'مركز الشيخ جابر الأحمد الثقافي',
+                rating: 4.7,
+                maps: 'https://www.google.com/maps/search/?api=1&query=White+Robata+Sheikh+Jaber+Al+Ahmad+Cultural+Centre+Kuwait',
+                images: ['white_robata_1.png', 'white_robata_2.png']
+              }
+            ]
+          }
+        ]
+      }
+    };
+
+    const screens = {
+      regions: document.getElementById('screen-regions'),
+      countries: document.getElementById('screen-countries'),
+      places: document.getElementById('screen-places'),
+      details: document.getElementById('screen-details')
+    };
+
+    const state = {
+      language: 'en',
+      screen: 'regions',
+      selectedRegion: null,
+      selectedCountry: null,
+      selectedCategory: 'malls',
+      selectedPlaceId: null,
+      openLocationId: null,
+      regionSearch: '',
+      countrySearch: '',
+      placeSearch: ''
+    };
+
+    const regionSearchInput = document.getElementById('region-search');
+    const countrySearchInput = document.getElementById('country-search');
+    const placeSearchInput = document.getElementById('place-search');
+    const languageToggle = document.getElementById('language-toggle');
+
+    function t(key) {
+      return translations[state.language][key] ?? key;
+    }
+
+    function getLabel(item) {
+      return state.language === 'ar' && item?.nameAr ? item.nameAr : item?.name || '';
+    }
+
+    function getDescription(item) {
+      return state.language === 'ar' && item?.descriptionAr ? item.descriptionAr : item?.description || '';
+    }
+
+    function stars(rating) {
+      const full = Math.max(0, Math.min(5, Math.round(rating)));
+      return '★'.repeat(full) + '☆'.repeat(5 - full);
+    }
+
+    function matchesQuery(query, values) {
+      const q = query.trim().toLowerCase();
+      if (!q) return true;
+      return values.some((value) => String(value || '').toLowerCase().includes(q));
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function imageTag(src, alt) {
+      return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
+    }
+
+    function setScreen(screenName) {
+      state.screen = screenName;
+      Object.entries(screens).forEach(([key, screen]) => {
+        screen.classList.toggle('active', key === screenName);
+      });
+      languageToggle.classList.toggle('hidden', !['regions', 'countries'].includes(screenName));
+      window.scrollTo(0, 0);
+      const activeScreen = screens[screenName];
+      if (activeScreen) activeScreen.scrollTop = 0;
+      render();
+    }
+
+    function openRegion(regionId) {
+      state.selectedRegion = regionId;
+      state.countrySearch = '';
+      countrySearchInput.value = '';
+      setScreen('countries');
+    }
+
+    function openCountry(countryId) {
+      state.selectedCountry = countryId;
+      state.selectedCategory = 'malls';
+      state.placeSearch = '';
+      placeSearchInput.value = '';
+      setScreen('places');
+    }
+
+    function openPlace(placeId) {
+      state.selectedPlaceId = placeId;
+      state.openLocationId = null;
+      setScreen('details');
+    }
+
+    function goBack() {
+      if (state.screen === 'countries') {
+        setScreen('regions');
+      } else if (state.screen === 'places') {
+        setScreen('countries');
+      } else if (state.screen === 'details') {
+        setScreen('places');
+      }
+    }
+
+    function getSelectedRegion() {
+      return regions.find((region) => region.id === state.selectedRegion) || null;
+    }
+
+    function getSelectedCountry() {
+      const regionCountries = countriesByRegion[state.selectedRegion] || [];
+      return regionCountries.find((country) => country.id === state.selectedCountry) || null;
+    }
+
+    function getCurrentPlaces() {
+      if (!state.selectedCountry || !placesByCountry[state.selectedCountry]) return [];
+      return placesByCountry[state.selectedCountry][state.selectedCategory] || [];
+    }
+
+    function getSelectedPlace() {
+      return ['malls', 'cafe', 'restaurant']
+        .flatMap((key) => (placesByCountry[state.selectedCountry]?.[key] || []))
+        .find((place) => place.id === state.selectedPlaceId) || null;
+    }
+
+    function renderRegions() {
+      document.getElementById('regions-page-label').textContent = t('appLabel');
+      document.getElementById('regions-hero-title').textContent = t('regionsTitle');
+      document.getElementById('regions-hero-copy').textContent = t('regionsCopy');
+      regionSearchInput.placeholder = t('searchRegions');
+      languageToggle.textContent = state.language === 'en' ? 'AR' : 'EN';
+
+      const filtered = regions.filter((region) => matchesQuery(state.regionSearch, [region.name, region.nameAr]));
+      const html = filtered.length
+        ? filtered.map((region) => `
+            <button class="card-button region-card" type="button" data-region-id="${region.id}">
+              <div class="image-wrap">
+                ${imageTag(region.image, getLabel(region))}
+                ${region.active ? '' : `<span class="pill">${escapeHtml(t('comingSoon'))}</span>`}
+              </div>
+              <div>
+                <div class="card-title">${escapeHtml(getLabel(region))}</div>
+                <div class="card-subtitle">${escapeHtml(region.active ? t('countriesLabel') : t('comingSoon'))}</div>
+              </div>
+            </button>
+          `).join('')
+        : `
+          <div class="section-panel">
+            <h2>${escapeHtml(t('noResults'))}</h2>
+            <p>${escapeHtml(t('noResultsCopy'))}</p>
+          </div>
+        `;
+
+      document.getElementById('regions-grid').innerHTML = html;
+    }
+
+    function renderCountries() {
+      const region = getSelectedRegion();
+      document.getElementById('back-to-regions-text').textContent = t('back');
+      document.getElementById('countries-page-label').textContent = t('countriesLabel');
+      document.getElementById('countries-hero-title').textContent = region ? getLabel(region) : t('countriesLabel');
+      document.getElementById('countries-hero-copy').textContent = region?.active ? t('countriesCopyActive') : t('countriesCopySoon');
+      countrySearchInput.placeholder = t('searchCountries');
+
+      const container = document.getElementById('countries-content');
+      if (!region) {
+        container.innerHTML = '';
+        return;
+      }
+
+      if (!region.active) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>${escapeHtml(t('regionSoonTitle'))}</h3>
+            <p>${escapeHtml(t('regionSoonCopy'))}</p>
+            <div class="muted-note">${escapeHtml(t('demoNote'))}</div>
+          </div>
+        `;
+        return;
+      }
+
+      const countries = (countriesByRegion[region.id] || []).filter((country) => matchesQuery(state.countrySearch, [country.name, country.nameAr]));
+      container.innerHTML = countries.length
+        ? `<div class="grid">${countries.map((country) => `
+            <button class="card-button country-card" type="button" data-country-id="${country.id}" style="--tint:${country.tint};">
+              <div class="image-wrap">
+                ${imageTag(country.image, getLabel(country))}
+                ${country.active ? '' : `<span class="pill">${escapeHtml(t('comingSoon'))}</span>`}
+              </div>
+              <div>
+                <div class="card-title">${escapeHtml(getLabel(country))}</div>
+                <div class="card-subtitle">${escapeHtml(country.active ? t('placesLabel') : t('comingSoon'))}</div>
+              </div>
+            </button>
+          `).join('')}</div>`
+        : `
+          <div class="section-panel">
+            <h2>${escapeHtml(t('noResults'))}</h2>
+            <p>${escapeHtml(t('noResultsCopy'))}</p>
+          </div>
+        `;
+    }
+
+    function renderTabs() {
+      const tabs = [
+        { id: 'malls', label: t('malls') },
+        { id: 'cafe', label: t('cafe') },
+        { id: 'restaurant', label: t('restaurant') }
+      ];
+
+      document.getElementById('category-tabs').innerHTML = tabs.map((tab) => `
+        <button class="tab-button ${state.selectedCategory === tab.id ? 'active' : ''}" type="button" data-tab-id="${tab.id}">
+          ${escapeHtml(tab.label)}
+        </button>
+      `).join('');
+    }
+
+    function renderPlaces() {
+      const country = getSelectedCountry();
+      document.getElementById('back-to-countries-text').textContent = t('back');
+      document.getElementById('places-page-label').textContent = t('placesLabel');
+      document.getElementById('places-hero-title').textContent = country ? getLabel(country) : t('placesLabel');
+      placeSearchInput.placeholder = t('searchPlaces');
+
+      const tabs = document.getElementById('category-tabs');
+      const container = document.getElementById('places-content');
+
+      if (!country) {
+        tabs.innerHTML = '';
+        container.innerHTML = '';
+        return;
+      }
+
+      if (!country.active) {
+        tabs.innerHTML = '';
+        document.getElementById('places-hero-copy').textContent = t('placesCopySoon');
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>${escapeHtml(t('countrySoonTitle'))}</h3>
+            <p>${escapeHtml(t('countrySoonCopy'))}</p>
+            <div class="muted-note">${escapeHtml(t('demoNote'))}</div>
+          </div>
+        `;
+        return;
+      }
+
+      document.getElementById('places-hero-copy').textContent = t('placesCopyActive');
+      renderTabs();
+
+      const filtered = getCurrentPlaces().filter((place) =>
+        matchesQuery(state.placeSearch, [place.name, place.nameAr, place.description, place.descriptionAr])
+      );
+
+      container.innerHTML = filtered.length
+        ? `<div class="list">${filtered.map((place) => `
+            <button class="place-card" type="button" data-place-id="${place.id}">
+              <div class="place-logo">${imageTag(place.logo, getLabel(place))}</div>
+              <div class="place-meta">
+                <div class="place-name">${escapeHtml(getLabel(place))}</div>
+                <div class="rating-row">
+                  <span class="stars">${escapeHtml(stars(place.rating))}</span>
+                  <span>${escapeHtml(place.rating.toFixed(1))} ${escapeHtml(t('starsOutOfFive'))}</span>
+                </div>
+              </div>
+              <div class="place-chevron">›</div>
+            </button>
+          `).join('')}</div>`
+        : `
+          <div class="section-panel">
+            <h2>${escapeHtml(t('noResults'))}</h2>
+            <p>${escapeHtml(t('noResultsCopy'))}</p>
+          </div>
+        `;
+    }
+
+    function renderDetails() {
+      const place = getSelectedPlace();
+      document.getElementById('back-to-places-text').textContent = t('back');
+      document.getElementById('details-page-label').textContent = t('detailsLabel');
+
+      const container = document.getElementById('details-content');
+      if (!place) {
+        container.innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = `
+        <article class="detail-card">
+          <div class="detail-header">
+            <div class="detail-logo">${imageTag(place.logo, getLabel(place))}</div>
+            <div>
+              <h1 class="detail-title">${escapeHtml(getLabel(place))}</h1>
+              <div class="rating-row">
+                <span class="stars">${escapeHtml(stars(place.rating))}</span>
+                <span>${escapeHtml(place.rating.toFixed(1))} ${escapeHtml(t('starsOutOfFive'))}</span>
+              </div>
+            </div>
+          </div>
+          <p class="detail-copy">${escapeHtml(getDescription(place))}</p>
+          <a class="link-button" href="${escapeHtml(place.website)}" target="_blank" rel="noopener noreferrer">
+            ${escapeHtml(t('officialWebsite'))}
+          </a>
+        </article>
+
+        <section>
+          <p class="section-heading">${escapeHtml(t('locationTitle'))}</p>
+          <div class="accordion">
+            ${place.locations.map((location) => {
+              const isOpen = state.openLocationId === location.id;
+              return `
+                <div class="accordion-item ${isOpen ? 'open' : ''}">
+                  <button class="accordion-button" type="button" data-location-id="${location.id}">
+                    <div>
+                      <div class="accordion-title">${escapeHtml(getLabel(location))}</div>
+                      <div class="accordion-meta">${escapeHtml(t('rating'))}: ${escapeHtml(location.rating.toFixed(1))}</div>
+                    </div>
+                    <div class="accordion-icon">+</div>
+                  </button>
+                  <div class="accordion-panel">
+                    <div class="gallery">
+                      ${location.images.map((image, index) => `
+                        <div class="gallery-card">
+                          ${imageTag(image, `${getLabel(place)} ${index + 1}`)}
+                        </div>
+                      `).join('')}
+                    </div>
+                    <div class="mini-row">
+                      <span>${escapeHtml(t('rating'))}: ${escapeHtml(location.rating.toFixed(1))} ${escapeHtml(t('starsOutOfFive'))}</span>
+                      <a class="maps-link" href="${escapeHtml(location.maps)}" target="_blank" rel="noopener noreferrer">
+                        ${escapeHtml(t('openMaps'))}
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    function render() {
+      document.documentElement.lang = state.language;
+      document.documentElement.dir = state.language === 'ar' ? 'rtl' : 'ltr';
+      renderRegions();
+      renderCountries();
+      renderPlaces();
+      renderDetails();
+    }
+
+    document.addEventListener('click', (event) => {
+      const regionButton = event.target.closest('[data-region-id]');
+      if (regionButton) {
+        openRegion(regionButton.dataset.regionId);
+        return;
+      }
+
+      const countryButton = event.target.closest('[data-country-id]');
+      if (countryButton) {
+        openCountry(countryButton.dataset.countryId);
+        return;
+      }
+
+      const tabButton = event.target.closest('[data-tab-id]');
+      if (tabButton) {
+        state.selectedCategory = tabButton.dataset.tabId;
+        state.placeSearch = '';
+        placeSearchInput.value = '';
+        renderPlaces();
+        return;
+      }
+
+      const placeButton = event.target.closest('[data-place-id]');
+      if (placeButton) {
+        openPlace(placeButton.dataset.placeId);
+        return;
+      }
+
+      const locationButton = event.target.closest('[data-location-id]');
+      if (locationButton) {
+        const clickedId = locationButton.dataset.locationId;
+        state.openLocationId = state.openLocationId === clickedId ? null : clickedId;
+        renderDetails();
+      }
+    });
+
+    regionSearchInput.addEventListener('input', (event) => {
+      state.regionSearch = event.target.value;
+      renderRegions();
+    });
+
+    countrySearchInput.addEventListener('input', (event) => {
+      state.countrySearch = event.target.value;
+      renderCountries();
+    });
+
+    placeSearchInput.addEventListener('input', (event) => {
+      state.placeSearch = event.target.value;
+      renderPlaces();
+    });
+
+    document.getElementById('back-to-regions').addEventListener('click', goBack);
+    document.getElementById('back-to-countries').addEventListener('click', goBack);
+    document.getElementById('back-to-places').addEventListener('click', goBack);
+
+    languageToggle.addEventListener('click', () => {
+      state.language = state.language === 'en' ? 'ar' : 'en';
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
