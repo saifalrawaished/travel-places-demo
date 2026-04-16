@@ -5,27 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="theme-color" content="#f5f5f2" />
+  <meta name="theme-color" content="#0b2f74" />
   <title>Travel Places Demo</title>
   <style>
     :root {
-      --bg: #f5f5f2;
-      --surface: rgba(255, 255, 255, 0.82);
+      --bg: #eceef3;
+      --surface: rgba(255, 255, 255, 0.84);
       --surface-strong: #ffffff;
-      --text: #121212;
-      --muted: #6f6f6f;
-      --line: rgba(18, 18, 18, 0.1);
-      --line-strong: rgba(18, 18, 18, 0.16);
-      --shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+      --text: #0b2f74;
+      --muted: #5f7198;
+      --line: rgba(11, 47, 116, 0.14);
+      --line-strong: rgba(11, 47, 116, 0.24);
+      --shadow: 0 14px 34px rgba(11, 47, 116, 0.12);
       --radius-xl: 28px;
       --radius-lg: 22px;
       --radius-md: 18px;
       --radius-sm: 14px;
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
-      --accent: #121212;
-      --chip: rgba(18, 18, 18, 0.05);
-      --chip-active: #121212;
+      --accent: #0b2f74;
+      --chip: rgba(11, 47, 116, 0.08);
+      --chip-active: #0b2f74;
       --chip-active-text: #ffffff;
     }
 
@@ -64,9 +64,47 @@
       min-height: 100svh;
       position: relative;
       background:
-        radial-gradient(circle at top, rgba(255, 255, 255, 0.9), rgba(245, 245, 242, 0) 40%),
-        linear-gradient(180deg, #f8f8f6 0%, #f2f2ef 100%);
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.9), rgba(236, 238, 243, 0) 40%),
+        linear-gradient(180deg, #f4f6fb 0%, #e8edf7 100%);
       overflow: hidden;
+    }
+
+    .splash-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.92), rgba(236, 238, 243, 0) 42%),
+        linear-gradient(180deg, #f4f6fb 0%, #e8edf7 100%);
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+    }
+
+    .splash-screen.is-hiding {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .splash-logo {
+      width: min(44vw, 168px);
+      height: auto;
+      display: block;
+      animation: splashLogoIn 0.55s ease both;
+    }
+
+    @keyframes splashLogoIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
     }
 
     .screen {
@@ -103,7 +141,7 @@
       padding-top: calc(var(--safe-top) + 18px);
       margin: calc(-1 * var(--safe-top) - 18px) -18px 12px;
       padding-inline: 18px;
-      background: linear-gradient(180deg, rgba(245, 245, 242, 0.96) 0%, rgba(245, 245, 242, 0.88) 72%, rgba(245, 245, 242, 0) 100%);
+      background: linear-gradient(180deg, rgba(236, 238, 243, 0.96) 0%, rgba(236, 238, 243, 0.88) 72%, rgba(236, 238, 243, 0) 100%);
       backdrop-filter: blur(10px);
     }
 
@@ -131,12 +169,12 @@
       align-items: center;
       gap: 8px;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(255, 255, 255, 0.76);
       color: var(--text);
       padding: 10px 14px;
       border-radius: 999px;
       cursor: pointer;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 6px 18px rgba(11, 47, 116, 0.12);
     }
 
     .back-button span:last-child {
@@ -171,11 +209,11 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       border: 1px solid var(--line);
       border-radius: 18px;
       padding: 14px 16px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 10px 24px rgba(11, 47, 116, 0.1);
       margin-bottom: 16px;
     }
 
@@ -196,7 +234,7 @@
     }
 
     .search input::placeholder {
-      color: #8b8b8b;
+      color: #7a89a8;
     }
 
     .grid {
@@ -221,7 +259,7 @@
 
     .card-button:active {
       transform: scale(0.985);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 8px 18px rgba(11, 47, 116, 0.16);
     }
 
     .region-card {
@@ -236,14 +274,14 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      background: linear-gradient(180deg, color-mix(in srgb, var(--tint, #ffffff) 82%, #ffffff 18%), rgba(255,255,255,0.92));
+      background: linear-gradient(180deg, color-mix(in srgb, var(--tint, #eef3ff) 82%, #ffffff 18%), rgba(255,255,255,0.92));
     }
 
     .image-wrap {
       height: 132px;
       border-radius: 18px;
-      background: rgba(18, 18, 18, 0.03);
-      border: 1px solid rgba(18, 18, 18, 0.05);
+      background: rgba(11, 47, 116, 0.04);
+      border: 1px solid rgba(11, 47, 116, 0.08);
       display: grid;
       place-items: center;
       padding: 14px;
@@ -279,7 +317,7 @@
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      background: rgba(18, 18, 18, 0.86);
+      background: rgba(11, 47, 116, 0.92);
       color: #ffffff;
       padding: 7px 9px;
       border-radius: 999px;
@@ -287,7 +325,7 @@
 
     .section-panel {
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.74);
+      background: rgba(255, 255, 255, 0.8);
       box-shadow: var(--shadow);
       border-radius: var(--radius-xl);
       padding: 22px 18px;
@@ -341,16 +379,23 @@
 
     .place-card {
       display: flex;
-      align-items: center;
-      gap: 14px;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
       width: 100%;
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.86);
       border-radius: 22px;
       padding: 14px;
       text-align: start;
       cursor: pointer;
       box-shadow: var(--shadow);
+    }
+
+    .place-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
     .place-logo {
@@ -359,8 +404,8 @@
       border-radius: 18px;
       overflow: hidden;
       flex-shrink: 0;
-      border: 1px solid rgba(18, 18, 18, 0.08);
-      background: rgba(18, 18, 18, 0.03);
+      border: 1px solid rgba(11, 47, 116, 0.1);
+      background: rgba(11, 47, 116, 0.04);
       display: grid;
       place-items: center;
       padding: 10px;
@@ -396,7 +441,7 @@
 
     .stars {
       letter-spacing: 0.08em;
-      color: #121212;
+      color: #0b2f74;
       font-size: 12px;
     }
 
@@ -407,9 +452,30 @@
       font-weight: 700;
     }
 
+    .place-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .place-preview-thumb {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(11, 47, 116, 0.1);
+      background: rgba(11, 47, 116, 0.04);
+      aspect-ratio: 1 / 1;
+    }
+
+    .place-preview-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
     .detail-card {
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.84);
+      background: rgba(255, 255, 255, 0.88);
       box-shadow: var(--shadow);
       border-radius: var(--radius-xl);
       padding: 18px;
@@ -427,8 +493,8 @@
       width: 76px;
       height: 76px;
       border-radius: 22px;
-      border: 1px solid rgba(18, 18, 18, 0.08);
-      background: rgba(18, 18, 18, 0.03);
+      border: 1px solid rgba(11, 47, 116, 0.1);
+      background: rgba(11, 47, 116, 0.04);
       display: grid;
       place-items: center;
       padding: 12px;
@@ -463,7 +529,7 @@
       justify-content: center;
       gap: 8px;
       border: 1px solid var(--line);
-      background: #121212;
+      background: #0b2f74;
       color: #ffffff;
       padding: 12px 16px;
       border-radius: 999px;
@@ -480,81 +546,69 @@
       margin: 0 0 10px;
     }
 
-    .accordion {
+    #details-content section + section {
+      margin-top: 20px;
+    }
+
+    .media-groups,
+    .location-groups {
       display: flex;
       flex-direction: column;
       gap: 12px;
     }
 
-    .accordion-item {
+    .media-group,
+    .location-card {
       border: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.78);
+      background: rgba(255, 255, 255, 0.84);
       border-radius: 22px;
       overflow: hidden;
       box-shadow: var(--shadow);
-    }
-
-    .accordion-button {
-      width: 100%;
-      border: 0;
-      background: transparent;
-      color: var(--text);
       padding: 16px;
-      text-align: start;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      cursor: pointer;
     }
 
-    .accordion-title {
+    .media-group-title,
+    .location-title {
       font-size: 16px;
       font-weight: 700;
       letter-spacing: -0.02em;
     }
 
-    .accordion-meta {
+    .location-meta {
       margin-top: 4px;
       font-size: 13px;
       color: var(--muted);
     }
 
-    .accordion-icon {
-      font-size: 20px;
+    .media-subheading {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
       color: var(--muted);
-      flex-shrink: 0;
-      transition: transform 0.18s ease;
-    }
-
-    .accordion-item.open .accordion-icon {
-      transform: rotate(45deg);
-    }
-
-    .accordion-panel {
-      display: none;
-      padding: 0 16px 16px;
-      border-top: 1px solid var(--line);
-    }
-
-    .accordion-item.open .accordion-panel {
-      display: block;
     }
 
     .gallery {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
       gap: 10px;
       margin-top: 14px;
       margin-bottom: 14px;
+      padding-bottom: 4px;
     }
 
     .gallery-card {
+      flex: 0 0 min(78vw, 320px);
       border-radius: 18px;
       overflow: hidden;
-      border: 1px solid rgba(18, 18, 18, 0.08);
-      background: rgba(18, 18, 18, 0.03);
+      border: 1px solid rgba(11, 47, 116, 0.1);
+      background: rgba(11, 47, 116, 0.04);
       aspect-ratio: 1 / 1;
+      scroll-snap-align: start;
     }
 
     .gallery-card img {
@@ -562,6 +616,34 @@
       height: 100%;
       object-fit: cover;
       display: block;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .video-card {
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(11, 47, 116, 0.1);
+      background: rgba(11, 47, 116, 0.04);
+      aspect-ratio: 1 / 1;
+    }
+
+    .video-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .video-note {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
     }
 
     .mini-row {
@@ -581,7 +663,7 @@
       padding: 11px 14px;
       border-radius: 999px;
       border: 1px solid var(--line-strong);
-      background: rgba(18, 18, 18, 0.03);
+      background: rgba(11, 47, 116, 0.05);
       font-weight: 700;
       color: var(--text);
     }
@@ -592,12 +674,12 @@
       bottom: calc(var(--safe-bottom) + 18px);
       z-index: 40;
       border: 1px solid var(--line);
-      background: rgba(18, 18, 18, 0.92);
+      background: rgba(11, 47, 116, 0.94);
       color: #ffffff;
       border-radius: 999px;
       padding: 13px 16px;
       min-width: 64px;
-      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 16px 34px rgba(11, 47, 116, 0.24);
       font-size: 13px;
       font-weight: 800;
       letter-spacing: 0.08em;
@@ -611,7 +693,7 @@
       border-radius: var(--radius-xl);
       padding: 26px 18px;
       text-align: center;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.62);
     }
 
     .empty-state h3 {
@@ -656,9 +738,23 @@
         height: 118px;
       }
     }
+
+    @media (prefers-reduced-motion: reduce) {
+      .splash-screen {
+        transition: none;
+      }
+
+      .splash-logo {
+        animation: none;
+      }
+    }
   </style>
 </head>
 <body>
+  <div id="splash-screen" class="splash-screen" aria-label="Tripora splash screen">
+    <img class="splash-logo" src="assets/brand/logo.png" alt="Tripora logo" />
+  </div>
+
   <div class="app-shell">
     <section id="screen-regions" class="screen active">
       <div class="chrome">
@@ -773,6 +869,9 @@
         rating: 'Rating',
         openMaps: 'Open in Google Maps',
         locationTitle: 'Available locations',
+        photosVideosTitle: 'Photos and videos',
+        videos: 'Videos',
+        noVideosYet: 'No videos yet for this location.',
         regionSoonTitle: 'This region is not live yet',
         regionSoonCopy: 'Only Middle East is populated in this first demo.',
         countrySoonTitle: 'This country is not live yet',
@@ -807,6 +906,9 @@
         rating: 'التقييم',
         openMaps: 'افتح في خرائط جوجل',
         locationTitle: 'المواقع المتاحة',
+        photosVideosTitle: 'الصور والفيديوهات',
+        videos: 'الفيديوهات',
+        noVideosYet: 'لا توجد فيديوهات لهذا الموقع حالياً.',
         regionSoonTitle: 'هذه المنطقة غير مفعلة بعد',
         regionSoonCopy: 'الشرق الأوسط فقط هو المفعّل في النسخة الأولى.',
         countrySoonTitle: 'هذه الدولة غير مفعلة بعد',
@@ -818,27 +920,28 @@
     };
 
     const regions = [
-      { id: 'middle_east', name: 'Middle East', nameAr: 'الشرق الأوسط', image: 'middle_east.png', active: true },
-      { id: 'europe', name: 'Europe', nameAr: 'أوروبا', image: 'europe.png', active: false },
-      { id: 'north_africa', name: 'North Africa', nameAr: 'شمال أفريقيا', image: 'north_africa.png', active: false },
-      { id: 'united_states', name: 'United States', nameAr: 'الولايات المتحدة', image: 'united_states.png', active: false },
-      { id: 'russia', name: 'Russia', nameAr: 'روسيا', image: 'russia.png', active: false },
-      { id: 'latin_america', name: 'Latin America', nameAr: 'أمريكا اللاتينية', image: 'latin_america.png', active: false }
+      { id: 'middle_east', name: 'Middle East', nameAr: 'الشرق الأوسط', image: 'assets/regions/middle_east.png', active: true },
+      { id: 'europe', name: 'Europe', nameAr: 'أوروبا', image: 'assets/regions/europe.png', active: false },
+      { id: 'africa', name: 'Africa', nameAr: 'أفريقيا', image: 'assets/regions/africa.png', active: false },
+      { id: 'north_america', name: 'North America', nameAr: 'أمريكا الشمالية', image: 'assets/regions/north_america.png', active: false },
+      { id: 'asia', name: 'Asia', nameAr: 'آسيا', image: 'assets/regions/asia.png', active: false },
+      { id: 'australia', name: 'Australia', nameAr: 'أستراليا', image: 'assets/regions/australia.png', active: false },
+      { id: 'south_america', name: 'South America', nameAr: 'أمريكا الجنوبية', image: 'assets/regions/south_america.png', active: false }
     ];
 
     const countriesByRegion = {
       middle_east: [
-        { id: 'kuwait', name: 'Kuwait', nameAr: 'الكويت', image: 'kuwait.png', tint: '#eef4ee', active: true },
-        { id: 'saudi_arabia', name: 'Saudi Arabia', nameAr: 'السعودية', image: 'saudi_arabia.png', tint: '#e4f2e7', active: false },
-        { id: 'qatar', name: 'Qatar', nameAr: 'قطر', image: 'qatar.png', tint: '#f5edf3', active: false },
-        { id: 'uae', name: 'United Arab Emirates', nameAr: 'الإمارات', image: 'uae.png', tint: '#eef7f2', active: false },
-        { id: 'bahrain', name: 'Bahrain', nameAr: 'البحرين', image: 'bahrain.png', tint: '#f8ecec', active: false },
-        { id: 'oman', name: 'Oman', nameAr: 'عُمان', image: 'oman.png', tint: '#f6efe8', active: false },
-        { id: 'jordan', name: 'Jordan', nameAr: 'الأردن', image: 'jordan.png', tint: '#f2f2f2', active: false },
-        { id: 'lebanon', name: 'Lebanon', nameAr: 'لبنان', image: 'lebanon.png', tint: '#eef5ef', active: false },
-        { id: 'iraq', name: 'Iraq', nameAr: 'العراق', image: 'iraq.png', tint: '#f5f1ef', active: false },
-        { id: 'syria', name: 'Syria', nameAr: 'سوريا', image: 'syria.png', tint: '#f4f4f4', active: false },
-        { id: 'turkey', name: 'Turkey', nameAr: 'تركيا', image: 'turkey.png', tint: '#f8eded', active: false }
+        { id: 'kuwait', name: 'Kuwait', nameAr: 'الكويت', image: 'assets/countries/middle_east/kuwait.png', tint: '#edf3ff', active: true },
+        { id: 'saudi_arabia', name: 'Saudi Arabia', nameAr: 'السعودية', image: 'assets/countries/middle_east/saudi_arabia.png', tint: '#e8f0ff', active: false },
+        { id: 'qatar', name: 'Qatar', nameAr: 'قطر', image: 'assets/countries/middle_east/qatar.png', tint: '#f1f5ff', active: false },
+        { id: 'uae', name: 'United Arab Emirates', nameAr: 'الإمارات', image: 'assets/countries/middle_east/uae.png', tint: '#eaf3ff', active: false },
+        { id: 'bahrain', name: 'Bahrain', nameAr: 'البحرين', image: 'assets/countries/middle_east/bahrain.png', tint: '#f0f4ff', active: false },
+        { id: 'oman', name: 'Oman', nameAr: 'عُمان', image: 'assets/countries/middle_east/oman.png', tint: '#eef2ff', active: false },
+        { id: 'jordan', name: 'Jordan', nameAr: 'الأردن', image: 'assets/countries/middle_east/jordan.png', tint: '#f3f6ff', active: false },
+        { id: 'lebanon', name: 'Lebanon', nameAr: 'لبنان', image: 'assets/countries/middle_east/lebanon.png', tint: '#ecf2ff', active: false },
+        { id: 'iraq', name: 'Iraq', nameAr: 'العراق', image: 'assets/countries/middle_east/iraq.png', tint: '#f1f4ff', active: false },
+        { id: 'syria', name: 'Syria', nameAr: 'سوريا', image: 'assets/countries/middle_east/syria.png', tint: '#f4f6ff', active: false },
+        { id: 'turkey', name: 'Turkey', nameAr: 'تركيا', image: 'assets/countries/middle_east/turkey.png', tint: '#eef1ff', active: false }
       ]
     };
 
@@ -849,7 +952,7 @@
             id: 'arraya_centre',
             name: 'Arraya Centre',
             nameAr: 'مركز الراية',
-            logo: 'arraya_centre_logo.png',
+            logo: 'assets/places/malls/arraya_centre/arraya_centre_logo.png',
             rating: 4.6,
             description: 'Upscale shopping and dining destination in the Sharq district of Kuwait City.',
             descriptionAr: 'وجهة راقية للتسوق والمطاعم في منطقة شرق بمدينة الكويت.',
@@ -861,7 +964,7 @@
                 nameAr: 'شرق، مدينة الكويت',
                 rating: 4.6,
                 maps: 'https://www.google.com/maps/search/?api=1&query=Arraya+Centre+Kuwait+City',
-                images: ['arraya_centre_1.png', 'arraya_centre_2.png']
+                images: ['assets/places/malls/arraya_centre/arraya_centre_1.png', 'assets/places/malls/arraya_centre/arraya_centre_2.png']
               }
             ]
           },
@@ -869,7 +972,7 @@
             id: 'salhia',
             name: 'Salhia Commercial Complex',
             nameAr: 'مجمع الصالحية التجاري',
-            logo: 'salhia_logo.png',
+            logo: 'assets/places/malls/salhia/salhia_logo.png',
             rating: 4.5,
             description: 'Long-established luxury shopping complex in central Kuwait City.',
             descriptionAr: 'مجمع تسوق فاخر وعريق في وسط مدينة الكويت.',
@@ -881,7 +984,7 @@
                 nameAr: 'الصالحية، مدينة الكويت',
                 rating: 4.5,
                 maps: 'https://www.google.com/maps/search/?api=1&query=Salhia+Commercial+Complex+Kuwait+City',
-                images: ['salhia_1.png', 'salhia_2.png']
+                images: ['assets/places/malls/salhia/salhia_1.png', 'assets/places/malls/salhia/salhia_2.png']
               }
             ]
           }
@@ -891,7 +994,7 @@
             id: 'arabica',
             name: '% Arabica',
             nameAr: '٪ أرابيكا',
-            logo: 'arabica_logo.png',
+            logo: 'assets/places/cafe/arabica/arabica_logo.png',
             rating: 4.7,
             description: 'Minimalist specialty coffee spot known for espresso-based drinks and a clean design identity.',
             descriptionAr: 'مقهى قهوة مختصة بطابع بسيط وحديث، معروف بمشروبات الإسبريسو وتصميمه النظيف.',
@@ -903,7 +1006,7 @@
                 nameAr: 'ساحة الراية، شرق',
                 rating: 4.7,
                 maps: 'https://www.google.com/maps/search/?api=1&query=%25+Arabica+Arraya+Plaza+Kuwait+City',
-                images: ['arabica_arraya_1.png', 'arabica_arraya_2.png']
+                images: ['assets/places/cafe/arabica/arabica_arraya_1.png', 'assets/places/cafe/arabica/arabica_arraya_2.png']
               }
             ]
           },
@@ -911,7 +1014,7 @@
             id: 'caribou',
             name: 'Caribou Coffee',
             nameAr: 'كاريبو كوفي',
-            logo: 'caribou_coffee_logo.png',
+            logo: 'assets/places/cafe/caribou/caribou_coffee_logo.png',
             rating: 4.4,
             description: 'International coffee chain serving espresso drinks, brewed coffee, desserts, and quick bites.',
             descriptionAr: 'سلسلة قهوة عالمية تقدم مشروبات الإسبريسو والقهوة والحلويات والوجبات السريعة الخفيفة.',
@@ -923,7 +1026,7 @@
                 nameAr: 'مركز الراية، شرق',
                 rating: 4.4,
                 maps: 'https://www.google.com/maps/search/?api=1&query=Caribou+Coffee+Arraya+Centre+Kuwait+City',
-                images: ['caribou_arraya_1.png', 'caribou_arraya_2.png']
+                images: ['assets/places/cafe/caribou/caribou_arraya_1.png', 'assets/places/cafe/caribou/caribou_arraya_2.png']
               }
             ]
           },
@@ -931,7 +1034,7 @@
             id: 'tobys',
             name: "Toby's Coffee",
             nameAr: 'توبيز كوفي',
-            logo: 'tobys_coffee_logo.png',
+            logo: 'assets/places/cafe/tobys/tobys_coffee_logo.png',
             rating: 4.5,
             description: 'Specialty coffee stop for espresso, filter coffee, and a casual coffee break in the city.',
             descriptionAr: 'محطة قهوة مختصة للإسبريسو والقهوة المقطرة واستراحة هادئة داخل المدينة.',
@@ -943,7 +1046,7 @@
                 nameAr: 'مركز الراية، شرق',
                 rating: 4.5,
                 maps: 'https://www.google.com/maps/search/?api=1&query=Toby%27s+Coffee+Arraya+Centre+Kuwait+City',
-                images: ['tobys_arraya_1.png', 'tobys_arraya_2.png']
+                images: ['assets/places/cafe/tobys/tobys_arraya_1.png', 'assets/places/cafe/tobys/tobys_arraya_2.png']
               }
             ]
           }
@@ -953,7 +1056,7 @@
             id: 'white_robata',
             name: 'White Robata',
             nameAr: 'وايت روباتا',
-            logo: 'white_robata_logo.png',
+            logo: 'assets/places/restaurant/white_robata/white_robata_logo.png',
             rating: 4.7,
             description: 'Contemporary Japanese robata restaurant with a refined dining atmosphere.',
             descriptionAr: 'مطعم ياباني معاصر بطابع روباتا وأجواء راقية.',
@@ -965,7 +1068,7 @@
                 nameAr: 'مركز الشيخ جابر الأحمد الثقافي',
                 rating: 4.7,
                 maps: 'https://www.google.com/maps/search/?api=1&query=White+Robata+Sheikh+Jaber+Al+Ahmad+Cultural+Centre+Kuwait',
-                images: ['white_robata_1.png', 'white_robata_2.png']
+                images: ['assets/places/restaurant/white_robata/white_robata_1.png', 'assets/places/restaurant/white_robata/white_robata_2.png']
               }
             ]
           }
@@ -987,7 +1090,6 @@
       selectedCountry: null,
       selectedCategory: 'malls',
       selectedPlaceId: null,
-      openLocationId: null,
       regionSearch: '',
       countrySearch: '',
       placeSearch: ''
@@ -997,6 +1099,7 @@
     const countrySearchInput = document.getElementById('country-search');
     const placeSearchInput = document.getElementById('place-search');
     const languageToggle = document.getElementById('language-toggle');
+    const splashScreen = document.getElementById('splash-screen');
 
     function t(key) {
       return translations[state.language][key] ?? key;
@@ -1039,7 +1142,6 @@
       Object.entries(screens).forEach(([key, screen]) => {
         screen.classList.toggle('active', key === screenName);
       });
-      languageToggle.classList.toggle('hidden', !['regions', 'countries'].includes(screenName));
       window.scrollTo(0, 0);
       const activeScreen = screens[screenName];
       if (activeScreen) activeScreen.scrollTop = 0;
@@ -1063,7 +1165,6 @@
 
     function openPlace(placeId) {
       state.selectedPlaceId = placeId;
-      state.openLocationId = null;
       setScreen('details');
     }
 
@@ -1095,6 +1196,12 @@
       return ['malls', 'cafe', 'restaurant']
         .flatMap((key) => (placesByCountry[state.selectedCountry]?.[key] || []))
         .find((place) => place.id === state.selectedPlaceId) || null;
+    }
+
+    function getPlacePreviewImages(place, limit = 3) {
+      return (place?.locations || [])
+        .flatMap((location) => location.images || [])
+        .slice(0, limit);
     }
 
     function renderRegions() {
@@ -1226,19 +1333,34 @@
       );
 
       container.innerHTML = filtered.length
-        ? `<div class="list">${filtered.map((place) => `
-            <button class="place-card" type="button" data-place-id="${place.id}">
-              <div class="place-logo">${imageTag(place.logo, getLabel(place))}</div>
-              <div class="place-meta">
-                <div class="place-name">${escapeHtml(getLabel(place))}</div>
-                <div class="rating-row">
-                  <span class="stars">${escapeHtml(stars(place.rating))}</span>
-                  <span>${escapeHtml(place.rating.toFixed(1))} ${escapeHtml(t('starsOutOfFive'))}</span>
+        ? `<div class="list">${filtered.map((place) => {
+            const previewImages = getPlacePreviewImages(place, 3);
+            return `
+              <button class="place-card" type="button" data-place-id="${place.id}">
+                <div class="place-top">
+                  <div class="place-logo">${imageTag(place.logo, getLabel(place))}</div>
+                  <div class="place-meta">
+                    <div class="place-name">${escapeHtml(getLabel(place))}</div>
+                    <div class="rating-row">
+                      <span class="stars">${escapeHtml(stars(place.rating))}</span>
+                      <span>${escapeHtml(place.rating.toFixed(1))} ${escapeHtml(t('starsOutOfFive'))}</span>
+                    </div>
+                  </div>
+                  <div class="place-chevron">›</div>
                 </div>
-              </div>
-              <div class="place-chevron">›</div>
-            </button>
-          `).join('')}</div>`
+                ${previewImages.length
+                  ? `<div class="place-preview-grid">
+                      ${previewImages.map((image, index) => `
+                        <div class="place-preview-thumb">
+                          ${imageTag(image, `${getLabel(place)} ${index + 1}`)}
+                        </div>
+                      `).join('')}
+                    </div>`
+                  : ''
+                }
+              </button>
+            `;
+          }).join('')}</div>`
         : `
           <div class="section-panel">
             <h2>${escapeHtml(t('noResults'))}</h2>
@@ -1277,37 +1399,55 @@
         </article>
 
         <section>
-          <p class="section-heading">${escapeHtml(t('locationTitle'))}</p>
-          <div class="accordion">
+          <p class="section-heading">${escapeHtml(t('photosVideosTitle'))}</p>
+          <div class="media-groups">
             ${place.locations.map((location) => {
-              const isOpen = state.openLocationId === location.id;
+              const videos = Array.isArray(location.videos) ? location.videos : [];
               return `
-                <div class="accordion-item ${isOpen ? 'open' : ''}">
-                  <button class="accordion-button" type="button" data-location-id="${location.id}">
-                    <div>
-                      <div class="accordion-title">${escapeHtml(getLabel(location))}</div>
-                      <div class="accordion-meta">${escapeHtml(t('rating'))}: ${escapeHtml(location.rating.toFixed(1))}</div>
-                    </div>
-                    <div class="accordion-icon">+</div>
-                  </button>
-                  <div class="accordion-panel">
-                    <div class="gallery">
-                      ${location.images.map((image, index) => `
-                        <div class="gallery-card">
-                          ${imageTag(image, `${getLabel(place)} ${index + 1}`)}
-                        </div>
-                      `).join('')}
-                    </div>
-                    <div class="mini-row">
-                      <span>${escapeHtml(t('rating'))}: ${escapeHtml(location.rating.toFixed(1))} ${escapeHtml(t('starsOutOfFive'))}</span>
-                      <a class="maps-link" href="${escapeHtml(location.maps)}" target="_blank" rel="noopener noreferrer">
-                        ${escapeHtml(t('openMaps'))}
-                      </a>
-                    </div>
+                <article class="media-group">
+                  <div class="media-group-title">${escapeHtml(getLabel(location))}</div>
+                  <div class="location-meta">${escapeHtml(t('rating'))}: ${escapeHtml(location.rating.toFixed(1))}</div>
+                  <div class="gallery">
+                    ${location.images.map((image, index) => `
+                      <div class="gallery-card">
+                        ${imageTag(image, `${getLabel(place)} ${index + 1}`)}
+                      </div>
+                    `).join('')}
                   </div>
-                </div>
+                  <p class="media-subheading">${escapeHtml(t('videos'))}</p>
+                  ${videos.length
+                    ? `<div class="video-grid">
+                        ${videos.map((video) => `
+                          <div class="video-card">
+                            <video controls preload="metadata" playsinline ${video.poster ? `poster="${escapeHtml(video.poster)}"` : ''}>
+                              <source src="${escapeHtml(video.src || '')}" type="${escapeHtml(video.type || 'video/mp4')}" />
+                            </video>
+                          </div>
+                        `).join('')}
+                      </div>`
+                    : `<div class="video-note">${escapeHtml(t('noVideosYet'))}</div>`
+                  }
+                </article>
               `;
             }).join('')}
+          </div>
+        </section>
+
+        <section>
+          <p class="section-heading">${escapeHtml(t('locationTitle'))}</p>
+          <div class="location-groups">
+            ${place.locations.map((location) => `
+              <article class="location-card">
+                <div class="location-title">${escapeHtml(getLabel(location))}</div>
+                <div class="location-meta">${escapeHtml(t('rating'))}: ${escapeHtml(location.rating.toFixed(1))} ${escapeHtml(t('starsOutOfFive'))}</div>
+                <div class="mini-row">
+                  <span>${escapeHtml(t('openMaps'))}</span>
+                  <a class="maps-link" href="${escapeHtml(location.maps)}" target="_blank" rel="noopener noreferrer">
+                    ${escapeHtml(t('openMaps'))}
+                  </a>
+                </div>
+              </article>
+            `).join('')}
           </div>
         </section>
       `;
@@ -1350,12 +1490,6 @@
         return;
       }
 
-      const locationButton = event.target.closest('[data-location-id]');
-      if (locationButton) {
-        const clickedId = locationButton.dataset.locationId;
-        state.openLocationId = state.openLocationId === clickedId ? null : clickedId;
-        renderDetails();
-      }
     });
 
     regionSearchInput.addEventListener('input', (event) => {
@@ -1383,6 +1517,20 @@
     });
 
     render();
+
+    const splashDurationMs = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 400 : 2200;
+    window.setTimeout(() => {
+      if (!splashScreen) return;
+      splashScreen.classList.add('is-hiding');
+      window.setTimeout(() => {
+        splashScreen.remove();
+      }, 420);
+    }, splashDurationMs);
   </script>
 </body>
 </html>
+
+
+
+
+
