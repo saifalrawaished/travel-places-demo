@@ -27,6 +27,22 @@
       --chip: rgba(186, 206, 255, 0.2);
       --chip-active: #4a84f4;
       --chip-active-text: #ffffff;
+      --title-text: #ffffff;
+    }
+
+    :root[data-theme="light"] {
+      --bg: #eceef3;
+      --surface: rgba(255, 255, 255, 0.84);
+      --surface-strong: #ffffff;
+      --text: #0b2f74;
+      --muted: #5f7198;
+      --line: rgba(11, 47, 116, 0.14);
+      --line-strong: rgba(11, 47, 116, 0.24);
+      --shadow: 0 14px 34px rgba(11, 47, 116, 0.12);
+      --accent: #0b2f74;
+      --chip: rgba(11, 47, 116, 0.08);
+      --chip-active: #0b2f74;
+      --title-text: #0b2f74;
     }
 
     * {
@@ -196,6 +212,7 @@
       line-height: 1.02;
       letter-spacing: -0.04em;
       font-weight: 800;
+      color: var(--title-text);
     }
 
     .hero p {
@@ -301,6 +318,7 @@
       font-size: 16px;
       font-weight: 700;
       letter-spacing: -0.02em;
+      color: var(--title-text);
     }
 
     .card-subtitle {
@@ -428,6 +446,7 @@
       font-weight: 700;
       letter-spacing: -0.02em;
       margin-bottom: 6px;
+      color: var(--title-text);
     }
 
     .rating-row {
@@ -441,7 +460,7 @@
 
     .stars {
       letter-spacing: 0.08em;
-      color: #f4f8ff;
+      color: var(--title-text);
       font-size: 12px;
     }
 
@@ -514,6 +533,7 @@
       letter-spacing: -0.04em;
       font-weight: 800;
       margin: 0 0 6px;
+      color: var(--title-text);
     }
 
     .detail-copy {
@@ -668,11 +688,18 @@
       color: var(--text);
     }
 
-    .floating-lang {
+    .floating-actions {
       position: fixed;
       inset-inline-end: 18px;
       bottom: calc(var(--safe-bottom) + 18px);
       z-index: 40;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .floating-action {
+      position: static;
       border: 1px solid var(--line);
       background: rgba(74, 132, 244, 0.96);
       color: #ffffff;
@@ -686,6 +713,94 @@
       text-transform: uppercase;
       cursor: pointer;
       backdrop-filter: blur(12px);
+    }
+
+    .floating-action#theme-toggle {
+      min-width: 78px;
+    }
+
+    .floating-action#language-toggle {
+      min-width: 64px;
+    }
+
+    :root[data-theme="light"] .app-shell {
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.9), rgba(236, 238, 243, 0) 40%),
+        linear-gradient(180deg, #f4f6fb 0%, #e8edf7 100%);
+    }
+
+    :root[data-theme="light"] .splash-screen {
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.92), rgba(236, 238, 243, 0) 42%),
+        linear-gradient(180deg, #f4f6fb 0%, #e8edf7 100%);
+    }
+
+    :root[data-theme="light"] .chrome {
+      background: linear-gradient(180deg, rgba(236, 238, 243, 0.96) 0%, rgba(236, 238, 243, 0.88) 72%, rgba(236, 238, 243, 0) 100%);
+    }
+
+    :root[data-theme="light"] .back-button {
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 6px 18px rgba(11, 47, 116, 0.12);
+    }
+
+    :root[data-theme="light"] .search {
+      background: rgba(255, 255, 255, 0.85);
+      box-shadow: 0 10px 24px rgba(11, 47, 116, 0.1);
+    }
+
+    :root[data-theme="light"] .search input::placeholder {
+      color: #7a89a8;
+    }
+
+    :root[data-theme="light"] .country-card {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--tint, #eef3ff) 82%, #ffffff 18%), rgba(255,255,255,0.92));
+    }
+
+    :root[data-theme="light"] .image-wrap,
+    :root[data-theme="light"] .place-logo,
+    :root[data-theme="light"] .place-preview-thumb,
+    :root[data-theme="light"] .detail-logo,
+    :root[data-theme="light"] .gallery-card,
+    :root[data-theme="light"] .video-card {
+      background: rgba(11, 47, 116, 0.04);
+      border-color: rgba(11, 47, 116, 0.1);
+    }
+
+    :root[data-theme="light"] .image-wrap {
+      border-color: rgba(11, 47, 116, 0.08);
+    }
+
+    :root[data-theme="light"] .pill {
+      background: rgba(11, 47, 116, 0.92);
+    }
+
+    :root[data-theme="light"] .section-panel,
+    :root[data-theme="light"] .place-card,
+    :root[data-theme="light"] .media-group,
+    :root[data-theme="light"] .location-card {
+      background: rgba(255, 255, 255, 0.84);
+    }
+
+    :root[data-theme="light"] .detail-card {
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    :root[data-theme="light"] .maps-link {
+      background: rgba(11, 47, 116, 0.05);
+    }
+
+    :root[data-theme="light"] .link-button {
+      background: #0b2f74;
+    }
+
+    :root[data-theme="light"] .floating-action {
+      background: rgba(11, 47, 116, 0.94);
+      box-shadow: 0 16px 34px rgba(11, 47, 116, 0.24);
+    }
+
+    :root[data-theme="light"] .empty-state {
+      background: rgba(255, 255, 255, 0.62);
     }
 
     .empty-state {
@@ -839,7 +954,10 @@
     </section>
   </div>
 
-  <button id="language-toggle" class="floating-lang" type="button">EN</button>
+  <div class="floating-actions">
+    <button id="theme-toggle" class="floating-action" type="button">Light</button>
+    <button id="language-toggle" class="floating-action" type="button">EN</button>
+  </div>
 
   <script>
     const translations = {
@@ -861,9 +979,12 @@
         searchPlaces: 'Search places',
         noResults: 'No results found.',
         noResultsCopy: 'Try another search term.',
-        malls: 'Malls',
+        touristAttraction: 'Tourist attraction',
         cafe: 'Cafe',
         restaurant: 'Restaurant',
+        service: 'Service',
+        activity: 'Activity',
+        hotel: 'Hotel',
         officialWebsite: 'Official website',
         locations: 'Locations',
         rating: 'Rating',
@@ -898,9 +1019,12 @@
         searchPlaces: 'ابحث عن مكان',
         noResults: 'لا توجد نتائج.',
         noResultsCopy: 'جرّب كلمة بحث مختلفة.',
-        malls: 'مولات',
+        touristAttraction: 'معالم سياحية',
         cafe: 'مقاهي',
         restaurant: 'مطاعم',
+        service: 'خدمات',
+        activity: 'أنشطة',
+        hotel: 'فنادق',
         officialWebsite: 'الموقع الرسمي',
         locations: 'المواقع',
         rating: 'التقييم',
@@ -947,128 +1071,634 @@
 
     const placesByCountry = {
       kuwait: {
-        malls: [
+        tourist_attraction: [
           {
-            id: 'arraya_centre',
-            name: 'Arraya Centre',
-            nameAr: 'مركز الراية',
-            logo: 'assets/places/malls/arraya_centre/arraya_centre_logo.png',
+            id: "the_avenues",
+            name: "The Avenues",
+            nameAr: "الأفنيوز",
+            logo: "assets/places/tourist_attraction/the_avenues/the_avenues_logo.png",
             rating: 4.6,
-            description: 'Upscale shopping and dining destination in the Sharq district of Kuwait City.',
-            descriptionAr: 'وجهة راقية للتسوق والمطاعم في منطقة شرق بمدينة الكويت.',
-            website: 'https://www.arraya-centre.com/',
+            description: "Kuwait's largest shopping and lifestyle destination with retail, dining, entertainment, and hotels.",
+            descriptionAr: "أكبر وجهة تسوق ونمط حياة في الكويت، تضم متاجر ومطاعم وترفيه وفنادق.",
+            website: "https://www.the-avenues.com/",
             locations: [
               {
-                id: 'arraya-sharq',
-                name: 'Sharq, Kuwait City',
-                nameAr: 'شرق، مدينة الكويت',
+                id: "the_avenues-main",
+                name: "The Avenues, Kuwait",
+                nameAr: "الأفنيوز، الكويت",
                 rating: 4.6,
-                maps: 'https://www.google.com/maps/search/?api=1&query=Arraya+Centre+Kuwait+City',
-                images: ['assets/places/malls/arraya_centre/arraya_centre_1.png', 'assets/places/malls/arraya_centre/arraya_centre_2.png']
+                maps: "https://www.google.com/maps/search/?api=1&query=The+Avenues+Kuwait",
+                images: ["assets/places/tourist_attraction/the_avenues/the_avenues_1.png", "assets/places/tourist_attraction/the_avenues/the_avenues_2.png", "assets/places/tourist_attraction/the_avenues/the_avenues_3.png", "assets/places/tourist_attraction/the_avenues/the_avenues_4.png", "assets/places/tourist_attraction/the_avenues/the_avenues_5.png", "assets/places/tourist_attraction/the_avenues/the_avenues_6.png", "assets/places/tourist_attraction/the_avenues/the_avenues_7.png", "assets/places/tourist_attraction/the_avenues/the_avenues_8.png"]
               }
             ]
           },
           {
-            id: 'salhia',
-            name: 'Salhia Commercial Complex',
-            nameAr: 'مجمع الصالحية التجاري',
-            logo: 'assets/places/malls/salhia/salhia_logo.png',
-            rating: 4.5,
-            description: 'Long-established luxury shopping complex in central Kuwait City.',
-            descriptionAr: 'مجمع تسوق فاخر وعريق في وسط مدينة الكويت.',
-            website: 'https://www.salhia-complex.com/',
+            id: "murouj",
+            name: "Murouj",
+            nameAr: "مروج",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Outdoor lifestyle destination in Subhan known for restaurants, cafes, leisure, and a family-friendly atmosphere.",
+            descriptionAr: "وجهة خارجية في صبحان معروفة بالمطاعم والمقاهي والأنشطة والأجواء العائلية.",
+            website: "https://www.themurouj.com/",
             locations: [
               {
-                id: 'salhia-city',
-                name: 'Salhiya, Kuwait City',
-                nameAr: 'الصالحية، مدينة الكويت',
-                rating: 4.5,
-                maps: 'https://www.google.com/maps/search/?api=1&query=Salhia+Commercial+Complex+Kuwait+City',
-                images: ['assets/places/malls/salhia/salhia_1.png', 'assets/places/malls/salhia/salhia_2.png']
-              }
-            ]
-          }
-        ],
-        cafe: [
-          {
-            id: 'arabica',
-            name: '% Arabica',
-            nameAr: '٪ أرابيكا',
-            logo: 'assets/places/cafe/arabica/arabica_logo.png',
-            rating: 4.7,
-            description: 'Minimalist specialty coffee spot known for espresso-based drinks and a clean design identity.',
-            descriptionAr: 'مقهى قهوة مختصة بطابع بسيط وحديث، معروف بمشروبات الإسبريسو وتصميمه النظيف.',
-            website: 'https://arabica.com/location/arabica-kuwait-arraya-plaza/',
-            locations: [
-              {
-                id: 'arabica-arraya',
-                name: 'Arraya Plaza, Sharq',
-                nameAr: 'ساحة الراية، شرق',
-                rating: 4.7,
-                maps: 'https://www.google.com/maps/search/?api=1&query=%25+Arabica+Arraya+Plaza+Kuwait+City',
-                images: ['assets/places/cafe/arabica/arabica_arraya_1.png', 'assets/places/cafe/arabica/arabica_arraya_2.png']
+                id: "murouj-main",
+                name: "Murouj, Kuwait",
+                nameAr: "مروج، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Murouj+Kuwait",
+                images: []
               }
             ]
           },
           {
-            id: 'caribou',
-            name: 'Caribou Coffee',
-            nameAr: 'كاريبو كوفي',
-            logo: 'assets/places/cafe/caribou/caribou_coffee_logo.png',
-            rating: 4.4,
-            description: 'International coffee chain serving espresso drinks, brewed coffee, desserts, and quick bites.',
-            descriptionAr: 'سلسلة قهوة عالمية تقدم مشروبات الإسبريسو والقهوة والحلويات والوجبات السريعة الخفيفة.',
-            website: 'https://www.cariboucoffee.com/around-the-world/',
+            id: "al_shaheed_park",
+            name: "Al Shaheed Park",
+            nameAr: "حديقة الشهيد",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Kuwait's largest urban park, combining green spaces, walkways, museums, and cultural programming.",
+            descriptionAr: "أكبر حديقة حضرية في الكويت، تجمع بين المساحات الخضراء والممرات والمتاحف والأنشطة الثقافية.",
+            website: "https://shaheedpark.da.gov.kw/",
             locations: [
               {
-                id: 'caribou-arraya',
-                name: 'Arraya Centre, Sharq',
-                nameAr: 'مركز الراية، شرق',
-                rating: 4.4,
-                maps: 'https://www.google.com/maps/search/?api=1&query=Caribou+Coffee+Arraya+Centre+Kuwait+City',
-                images: ['assets/places/cafe/caribou/caribou_arraya_1.png', 'assets/places/cafe/caribou/caribou_arraya_2.png']
+                id: "al_shaheed_park-main",
+                name: "Al Shaheed Park, Kuwait",
+                nameAr: "حديقة الشهيد، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Al+Shaheed+Park+Kuwait",
+                images: []
               }
             ]
           },
           {
-            id: 'tobys',
-            name: "Toby's Coffee",
-            nameAr: 'توبيز كوفي',
-            logo: 'assets/places/cafe/tobys/tobys_coffee_logo.png',
-            rating: 4.5,
-            description: 'Specialty coffee stop for espresso, filter coffee, and a casual coffee break in the city.',
-            descriptionAr: 'محطة قهوة مختصة للإسبريسو والقهوة المقطرة واستراحة هادئة داخل المدينة.',
-            website: 'https://kw.tobysestateme.com/select/branch',
+            id: "souq_al_mubarakiya",
+            name: "Souq Al-Mubarakiya",
+            nameAr: "سوق المباركية",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Historic traditional market in Kuwait City, known for shopping, heritage atmosphere, local food, and old Kuwait character.",
+            descriptionAr: "سوق تراثي تاريخي في مدينة الكويت، معروف بالتسوق والأجواء الشعبية والمطاعم والطابع الكويتي القديم.",
+            website: "https://souq-al-mubarakiya.com/",
             locations: [
               {
-                id: 'tobys-arraya',
-                name: 'Arraya Centre, Sharq',
-                nameAr: 'مركز الراية، شرق',
-                rating: 4.5,
-                maps: 'https://www.google.com/maps/search/?api=1&query=Toby%27s+Coffee+Arraya+Centre+Kuwait+City',
-                images: ['assets/places/cafe/tobys/tobys_arraya_1.png', 'assets/places/cafe/tobys/tobys_arraya_2.png']
+                id: "souq_al_mubarakiya-main",
+                name: "Souq Al-Mubarakiya, Kuwait",
+                nameAr: "سوق المباركية، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Souq+Al-Mubarakiya+Kuwait+City",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "360_mall",
+            name: "360 Mall",
+            nameAr: "360 مول",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Premium lifestyle mall combining luxury retail, dining, leisure, sports, and hospitality.",
+            descriptionAr: "مول راقٍ يجمع بين التسوق الفاخر والمطاعم والترفيه والرياضة والضيافة.",
+            website: "https://www.tamdeen.com/portfolio/360-mall",
+            locations: [
+              {
+                id: "360_mall-main",
+                name: "360 Mall, Kuwait",
+                nameAr: "360 مول، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=360+Mall+Kuwait",
+                images: []
               }
             ]
           }
         ],
         restaurant: [
           {
-            id: 'white_robata',
-            name: 'White Robata',
-            nameAr: 'وايت روباتا',
-            logo: 'assets/places/restaurant/white_robata/white_robata_logo.png',
-            rating: 4.7,
-            description: 'Contemporary Japanese robata restaurant with a refined dining atmosphere.',
-            descriptionAr: 'مطعم ياباني معاصر بطابع روباتا وأجواء راقية.',
-            website: 'https://www.whiterobata.com/',
+            id: "white_robata",
+            name: "White Robata",
+            nameAr: "وايت روباتا",
+            logo: "assets/places/restaurant/white_robata/white_robata_logo.png",
+            rating: 4.6,
+            description: "Contemporary Japanese robata restaurant at JACC with an upscale dining atmosphere.",
+            descriptionAr: "مطعم ياباني معاصر في مركز الشيخ جابر الثقافي بأجواء راقية.",
+            website: "https://www.whiterobata.com/",
             locations: [
               {
-                id: 'white-robata-jacc',
-                name: 'Sheikh Jaber Al Ahmad Cultural Centre',
-                nameAr: 'مركز الشيخ جابر الأحمد الثقافي',
-                rating: 4.7,
-                maps: 'https://www.google.com/maps/search/?api=1&query=White+Robata+Sheikh+Jaber+Al+Ahmad+Cultural+Centre+Kuwait',
-                images: ['assets/places/restaurant/white_robata/white_robata_1.png', 'assets/places/restaurant/white_robata/white_robata_2.png']
+                id: "white_robata-main",
+                name: "White Robata, Kuwait",
+                nameAr: "وايت روباتا، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=White+Robata+Kuwait",
+                images: ["assets/places/restaurant/white_robata/white_robata_1.png", "assets/places/restaurant/white_robata/white_robata_2.png"]
+              }
+            ]
+          },
+          {
+            id: "roka_kuwait",
+            name: "ROKA Kuwait",
+            nameAr: "روكا الكويت",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Modern Japanese robatayaki restaurant at Waldorf Astoria Kuwait in The Avenues district.",
+            descriptionAr: "مطعم ياباني حديث بأسلوب الروباتاياكي داخل والدورف أستوريا الكويت في منطقة الأفنيوز.",
+            website: "https://www.rokarestaurant.com/en/roka-the-avenues-kuwait",
+            locations: [
+              {
+                id: "roka_kuwait-main",
+                name: "ROKA Kuwait, Kuwait",
+                nameAr: "روكا الكويت، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=ROKA+Kuwait+The+Avenues",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "beefbar_kuwait",
+            name: "Beefbar Kuwait",
+            nameAr: "بيف بار الكويت",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Luxury dining concept focused on premium beef, gourmet street food, and stylish contemporary interiors.",
+            descriptionAr: "مطعم فاخر يركز على اللحوم الفاخرة وأطباق الستريت فود الراقية ضمن أجواء عصرية.",
+            website: "https://beefbar.com/kuwait/",
+            locations: [
+              {
+                id: "beefbar_kuwait-main",
+                name: "Beefbar Kuwait, Kuwait",
+                nameAr: "بيف بار الكويت، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Beefbar+Kuwait+JACC",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "cocoa_room",
+            name: "Cocoa Room",
+            nameAr: "كوكاو روم",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Stylish Kuwait restaurant known for breakfast, desserts, hot chocolate, and visually polished presentation.",
+            descriptionAr: "مطعم كويتي أنيق معروف بالفطور والحلويات والشوكولاتة الساخنة وتقديمه المميز.",
+            website: "https://www.cocoaroom.co/",
+            locations: [
+              {
+                id: "cocoa_room-main",
+                name: "Cocoa Room, Kuwait",
+                nameAr: "كوكاو روم، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Cocoa+Room+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "amimoto",
+            name: "Amimoto",
+            nameAr: "أميموتو",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Japanese restaurant in Kuwait Towers serving Japanese dishes with a contemporary twist.",
+            descriptionAr: "مطعم ياباني في أبراج الكويت يقدم أطباقاً يابانية بلمسة عصرية.",
+            website: "https://restaurants.kuwaittowers.com/",
+            locations: [
+              {
+                id: "amimoto-main",
+                name: "Amimoto, Kuwait",
+                nameAr: "أميموتو، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Amimoto+Kuwait+Towers",
+                images: []
+              }
+            ]
+          }
+        ],
+        cafe: [
+          {
+            id: "arabica",
+            name: "% Arabica",
+            nameAr: "٪ أرابيكا",
+            logo: "assets/places/cafe/arabica/arabica_logo.png",
+            rating: 4.6,
+            description: "Kyoto-born specialty coffee brand known for espresso drinks, design-led interiors, and strong visual identity.",
+            descriptionAr: "علامة قهوة مختصة انطلقت من كيوتو، معروفة بالإسبريسو والتصميم المميز والهوية البصرية القوية.",
+            website: "https://arabica.com/en/location/arabica-kuwait-arraya-plaza/",
+            locations: [
+              {
+                id: "arabica-main",
+                name: "% Arabica, Kuwait",
+                nameAr: "٪ أرابيكا، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=%25+Arabica+Arraya+Plaza+Kuwait",
+                images: ["assets/places/cafe/arabica/arabica_arraya_1.png", "assets/places/cafe/arabica/arabica_arraya_2.png"]
+              }
+            ]
+          },
+          {
+            id: "caribou",
+            name: "Caribou Coffee",
+            nameAr: "كاريبو كوفي",
+            logo: "assets/places/cafe/caribou/caribou_coffee_logo.png",
+            rating: 4.6,
+            description: "International coffee chain with broad branch coverage in Kuwait and a menu of coffee, snacks, and desserts.",
+            descriptionAr: "سلسلة قهوة عالمية لها انتشار واسع في الكويت وتقدم القهوة والوجبات الخفيفة والحلويات.",
+            website: "https://www.cariboucoffee.com/around-the-world/",
+            locations: [
+              {
+                id: "caribou-main",
+                name: "Caribou Coffee, Kuwait",
+                nameAr: "كاريبو كوفي، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Caribou+Coffee+Kuwait",
+                images: ["assets/places/cafe/caribou/caribou_arraya_1.png", "assets/places/cafe/caribou/caribou_arraya_2.png"]
+              }
+            ]
+          },
+          {
+            id: "tobys",
+            name: "Toby's Estate",
+            nameAr: "توبيز إستيت",
+            logo: "assets/places/cafe/tobys/tobys_coffee_logo.png",
+            rating: 4.6,
+            description: "Specialty coffee brand with multiple Kuwait locations, focused on espresso and coffee-forward cafe service.",
+            descriptionAr: "علامة قهوة مختصة لها عدة فروع في الكويت وتركز على الإسبريسو وتجربة القهوة المتخصصة.",
+            website: "https://kw.tobysestateme.com/",
+            locations: [
+              {
+                id: "tobys-main",
+                name: "Toby's Estate, Kuwait",
+                nameAr: "توبيز إستيت، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Toby%27s+Estate+Kuwait",
+                images: ["assets/places/cafe/tobys/tobys_arraya_1.png", "assets/places/cafe/tobys/tobys_arraya_2.png"]
+              }
+            ]
+          },
+          {
+            id: "dose_cafe",
+            name: "Dose Cafe",
+            nameAr: "دوز كافيه",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Homegrown specialty coffee brand founded in Kuwait, now expanded across multiple branches.",
+            descriptionAr: "علامة قهوة مختصة كويتية المنشأ بدأت في الكويت وتوسعت إلى عدة فروع.",
+            website: "https://dosecafe.limetray.com/",
+            locations: [
+              {
+                id: "dose_cafe-main",
+                name: "Dose Cafe, Kuwait",
+                nameAr: "دوز كافيه، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Dose+Cafe+Sharq+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "caf_cafe",
+            name: "CAF Cafe",
+            nameAr: "كاف",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Kuwait-born specialty coffee concept centered on crafted coffee and a modern cafe experience.",
+            descriptionAr: "مفهوم كويتي للقهوة المختصة يركز على جودة التحضير وتجربة مقهى عصرية.",
+            website: "https://www.ordercaf.com/",
+            locations: [
+              {
+                id: "caf_cafe-main",
+                name: "CAF Cafe, Kuwait",
+                nameAr: "كاف، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=CAF+Cafe+Kuwait",
+                images: []
+              }
+            ]
+          }
+        ],
+        service: [
+          {
+            id: "oula_fuel_station",
+            name: "Oula Fuel Station",
+            nameAr: "أولى للوقود",
+            type: "Fuel",
+            typeAr: "بانزين",
+            logo: "assets/places/service/oula_fuel_station/oula_fuel_station_logo.png",
+            rating: 4.6,
+            description: "Major Kuwait fuel-station brand offering refueling and station services.",
+            descriptionAr: "علامة محطات وقود رئيسية في الكويت تقدم خدمات التزود بالوقود والخدمات المصاحبة.",
+            website: "https://oula1.com/",
+            locations: [
+              {
+                id: "oula_fuel_station-main",
+                name: "Oula Fuel Station, Kuwait",
+                nameAr: "أولى للوقود، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Oula+Fuel+Station+Kuwait+City",
+                images: ["assets/places/service/oula_fuel_station/oula_fuel_station_1.png", "assets/places/service/oula_fuel_station/oula_fuel_station_2.png", "assets/places/service/oula_fuel_station/oula_fuel_station_3.png"]
+              }
+            ]
+          },
+          {
+            id: "pass_parking",
+            name: "PASS Parking",
+            nameAr: "باس للمواقف",
+            type: "Parking",
+            typeAr: "مصافط",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Kuwait smart parking system designed to make parking easier and more efficient.",
+            descriptionAr: "نظام مواقف ذكي من الكويت يهدف إلى تسهيل وتنظيم عملية الوقوف.",
+            website: "https://www.getpass.me/",
+            locations: [
+              {
+                id: "pass_parking-main",
+                name: "PASS Parking, Kuwait",
+                nameAr: "باس للمواقف، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=PASS+parking+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "auto1_garage",
+            name: "AUTO1 Garage",
+            nameAr: "أوتو 1",
+            type: "Garage",
+            typeAr: "كراج",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Vehicle service and tire center offering maintenance, tire fitting, balancing, and quick garage services.",
+            descriptionAr: "مركز خدمات سيارات وإطارات يقدم صيانة وتركيب إطارات وترصيص وخدمات سريعة.",
+            website: "https://theauto1.com/",
+            locations: [
+              {
+                id: "auto1_garage-main",
+                name: "AUTO1 Garage, Kuwait",
+                nameAr: "أوتو 1، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=AUTO1+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "grand_mosque",
+            name: "Grand Mosque",
+            nameAr: "المسجد الكبير",
+            type: "Mosque",
+            typeAr: "مسجد",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Kuwait's largest mosque and a major landmark in Kuwait City.",
+            descriptionAr: "أكبر مسجد في الكويت وأحد أبرز معالم مدينة الكويت.",
+            website: "https://eservices.awqaf.gov.kw/MinistryServicesGate/index",
+            locations: [
+              {
+                id: "grand_mosque-main",
+                name: "Grand Mosque, Kuwait",
+                nameAr: "المسجد الكبير، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Grand+Mosque+Kuwait+City",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "the_avenues_services",
+            name: "The Avenues Services",
+            nameAr: "خدمات الأفنيوز",
+            type: "Restrooms / prayer / visitor services",
+            typeAr: "حمام",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Visitor-support services at The Avenues including accessible toilets, prayer rooms, valet, and other conveniences.",
+            descriptionAr: "خدمات داعمة للزوار في الأفنيوز تشمل دورات المياه المهيأة وغرف الصلاة وخدمة صف السيارات وغيرها.",
+            website: "https://www.the-avenues.com/kuwait/en/services",
+            locations: [
+              {
+                id: "the_avenues_services-main",
+                name: "The Avenues Services, Kuwait",
+                nameAr: "خدمات الأفنيوز، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=The+Avenues+services+Kuwait",
+                images: []
+              }
+            ]
+          }
+        ],
+        activity: [
+          {
+            id: "kuwait_skydive",
+            name: "Kuwait Skydive",
+            nameAr: "القفز المظلي الكويت",
+            type: "Skydiving",
+            typeAr: "القفز من البرشوت",
+            logo: "assets/places/activity/kuwait_skydive/kuwait_skydive_logo.png",
+            rating: 4.6,
+            description: "Official skydiving center in Kuwait offering jumps and training experiences.",
+            descriptionAr: "المركز الرسمي للقفز المظلي في الكويت ويقدم تجارب القفز والتدريب.",
+            website: "https://www.kuwaitskydiveco.com/",
+            locations: [
+              {
+                id: "kuwait_skydive-main",
+                name: "Kuwait Skydive, Kuwait",
+                nameAr: "القفز المظلي الكويت، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Kuwait+Skydive",
+                images: ["assets/places/activity/kuwait_skydive/kuwait_skydive_1.png", "assets/places/activity/kuwait_skydive/kuwait_skydive_2.png", "assets/places/activity/kuwait_skydive/kuwait_skydive_3.png"]
+              }
+            ]
+          },
+          {
+            id: "silsan_boat_rental",
+            name: "Silsan Boat Rental",
+            nameAr: "سلسان لتأجير القوارب",
+            type: "Boat rental",
+            typeAr: "تأجير قارب",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Boat-rental service for marine outings and leisure trips in Kuwait.",
+            descriptionAr: "خدمة لتأجير القوارب للرحلات البحرية والأنشطة الترفيهية في الكويت.",
+            website: "https://silsanq8.com/",
+            locations: [
+              {
+                id: "silsan_boat_rental-main",
+                name: "Silsan Boat Rental, Kuwait",
+                nameAr: "سلسان لتأجير القوارب، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Silsan+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "mayadeen_shooting_ranges",
+            name: "Mayadeen Shooting Ranges",
+            nameAr: "ميادين للرماية",
+            type: "Shooting",
+            typeAr: "رماية",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Kuwait shooting complex with multiple range types and training options.",
+            descriptionAr: "مجمع رماية في الكويت يضم أنواعاً متعددة من الميادين وخيارات تدريب متنوعة.",
+            website: "https://www.mayadeen.com/ar/",
+            locations: [
+              {
+                id: "mayadeen_shooting_ranges-main",
+                name: "Mayadeen Shooting Ranges, Kuwait",
+                nameAr: "ميادين للرماية، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Mayadeen+shooting+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "kuwait_motor_town_karting_circuit",
+            name: "Kuwait Motor Town Karting Circuit",
+            nameAr: "حلبة الكويت موتور تاون للكارتينج",
+            type: "Track",
+            typeAr: "حلبة فورمولا",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Karting experience at Kuwait Motor Town with rental sessions and track access.",
+            descriptionAr: "تجربة كارتينج في الكويت موتور تاون مع جلسات تأجير واستخدام للحلبة.",
+            website: "https://www.kmt.kw/racetrack/karting/",
+            locations: [
+              {
+                id: "kuwait_motor_town_karting_circuit-main",
+                name: "Kuwait Motor Town Karting Circuit, Kuwait",
+                nameAr: "حلبة الكويت موتور تاون للكارتينج، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Kuwait+Motor+Town+Karting",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "public_authority_for_sport_playgrounds",
+            name: "Public Authority for Sport Playgrounds",
+            nameAr: "حجز الملاعب والساحات الرياضية",
+            type: "Sports fields",
+            typeAr: "ملاعب",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Government booking service for sports grounds and playgrounds in Kuwait.",
+            descriptionAr: "خدمة حكومية لحجز الساحات والملاعب الرياضية في الكويت.",
+            website: "https://e.gov.kw/sites/kgoenglish/Pages/eServices/Sport/BookingStadiums.aspx",
+            locations: [
+              {
+                id: "public_authority_for_sport_playgrounds-main",
+                name: "Public Authority for Sport Playgrounds, Kuwait",
+                nameAr: "حجز الملاعب والساحات الرياضية، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=sports+grounds+Kuwait",
+                images: []
+              }
+            ]
+          }
+        ],
+        hotel: [
+          {
+            id: "four_seasons_hotel_kuwait_at_burj_alshaya",
+            name: "Four Seasons Hotel Kuwait at Burj Alshaya",
+            nameAr: "فندق فورسيزونز الكويت برج الشايع",
+            logo: "assets/places/hotel/four_seasons_hotel_kuwait_at_burj_alshaya/four_seasons_hotel_kuwait_at_burj_alshaya_logo.png",
+            rating: 4.6,
+            description: "Luxury city hotel in downtown Kuwait City with large rooms, rooftop dining, and easy access to central landmarks.",
+            descriptionAr: "فندق فاخر في وسط مدينة الكويت يتميز بغرف واسعة ومطاعم علوية وموقع قريب من المعالم الرئيسية.",
+            website: "https://www.fourseasons.com/kuwait/",
+            locations: [
+              {
+                id: "four_seasons_hotel_kuwait_at_burj_alshaya-main",
+                name: "Four Seasons Hotel Kuwait at Burj Alshaya, Kuwait",
+                nameAr: "فندق فورسيزونز الكويت برج الشايع، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Four+Seasons+Kuwait+Burj+Alshaya",
+                images: ["assets/places/hotel/four_seasons_hotel_kuwait_at_burj_alshaya/four_seasons_hotel_kuwait_at_burj_alshaya_1.png", "assets/places/hotel/four_seasons_hotel_kuwait_at_burj_alshaya/four_seasons_hotel_kuwait_at_burj_alshaya_2.png", "assets/places/hotel/four_seasons_hotel_kuwait_at_burj_alshaya/four_seasons_hotel_kuwait_at_burj_alshaya_3.png"]
+              }
+            ]
+          },
+          {
+            id: "waldorf_astoria_kuwait",
+            name: "Waldorf Astoria Kuwait",
+            nameAr: "والدورف أستوريا الكويت",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Luxury hotel directly connected to The Avenues with spa, pool, and multiple restaurants.",
+            descriptionAr: "فندق فاخر متصل مباشرة بالأفنيوز ويضم سبا ومسبحاً وعدة مطاعم.",
+            website: "https://www.hilton.com/en/hotels/kwiwawa-waldorf-astoria-kuwait/",
+            locations: [
+              {
+                id: "waldorf_astoria_kuwait-main",
+                name: "Waldorf Astoria Kuwait, Kuwait",
+                nameAr: "والدورف أستوريا الكويت، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Waldorf+Astoria+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "jumeirah_messilah_beach_hotel_&_spa",
+            name: "Jumeirah Messilah Beach Hotel & Spa",
+            nameAr: "جميرا شاطئ المسيلة",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Beachfront luxury resort in Kuwait known for sea views, villas, spa, and family-friendly facilities.",
+            descriptionAr: "منتجع فاخر على البحر في الكويت معروف بإطلالاته البحرية والفلل والسبا والمرافق العائلية.",
+            website: "https://www.jumeirah.com/en/stay/kuwait/jumeirah-messilah-beach-hotel-and-spa",
+            locations: [
+              {
+                id: "jumeirah_messilah_beach_hotel_&_spa-main",
+                name: "Jumeirah Messilah Beach Hotel & Spa, Kuwait",
+                nameAr: "جميرا شاطئ المسيلة، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Jumeirah+Messilah+Beach+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "grand_hyatt_kuwait",
+            name: "Grand Hyatt Kuwait",
+            nameAr: "جراند حياة الكويت",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Luxury hotel integrated with 360 Mall, offering upscale rooms, spa, and destination dining.",
+            descriptionAr: "فندق فاخر متصل بـ 360 مول ويقدم غرفاً راقية وسبا وتجارب طعام مميزة.",
+            website: "https://www.hyatt.com/grand-hyatt/en-US/kwigh-grand-hyatt-kuwait",
+            locations: [
+              {
+                id: "grand_hyatt_kuwait-main",
+                name: "Grand Hyatt Kuwait, Kuwait",
+                nameAr: "جراند حياة الكويت، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=Grand+Hyatt+Kuwait",
+                images: []
+              }
+            ]
+          },
+          {
+            id: "the_regency_hotel_kuwait",
+            name: "The Regency Hotel Kuwait",
+            nameAr: "فندق الريجنسي الكويت",
+            logo: "assets/brand/logo.png",
+            rating: 4.6,
+            description: "Five-star seaside hotel on the Arabian Gulf with elegant rooms and resort-style facilities.",
+            descriptionAr: "فندق خمس نجوم على الخليج العربي يتميز بغرف أنيقة ومرافق بطابع منتجعي.",
+            website: "https://www.regency.com.kw/",
+            locations: [
+              {
+                id: "the_regency_hotel_kuwait-main",
+                name: "The Regency Hotel Kuwait, Kuwait",
+                nameAr: "فندق الريجنسي الكويت، الكويت",
+                rating: 4.6,
+                maps: "https://www.google.com/maps/search/?api=1&query=The+Regency+Kuwait",
+                images: []
               }
             ]
           }
@@ -1083,12 +1713,22 @@
       details: document.getElementById('screen-details')
     };
 
+    const CATEGORY_TABS = [
+      { id: 'tourist_attraction', labelKey: 'touristAttraction' },
+      { id: 'restaurant', labelKey: 'restaurant' },
+      { id: 'cafe', labelKey: 'cafe' },
+      { id: 'service', labelKey: 'service' },
+      { id: 'activity', labelKey: 'activity' },
+      { id: 'hotel', labelKey: 'hotel' }
+    ];
+
     const state = {
       language: 'en',
+      theme: 'dark',
       screen: 'regions',
       selectedRegion: null,
       selectedCountry: null,
-      selectedCategory: 'malls',
+      selectedCategory: CATEGORY_TABS[0].id,
       selectedPlaceId: null,
       regionSearch: '',
       countrySearch: '',
@@ -1098,8 +1738,11 @@
     const regionSearchInput = document.getElementById('region-search');
     const countrySearchInput = document.getElementById('country-search');
     const placeSearchInput = document.getElementById('place-search');
+    const themeToggle = document.getElementById('theme-toggle');
     const languageToggle = document.getElementById('language-toggle');
     const splashScreen = document.getElementById('splash-screen');
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+    const THEME_STORAGE_KEY = 'tripora-theme';
 
     function t(key) {
       return translations[state.language][key] ?? key;
@@ -1137,6 +1780,18 @@
       return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}" loading="lazy" />`;
     }
 
+    function applyTheme(theme) {
+      const nextTheme = theme === 'light' ? 'light' : 'dark';
+      state.theme = nextTheme;
+      document.documentElement.dataset.theme = nextTheme;
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute('content', nextTheme === 'light' ? '#eceef3' : '#061938');
+      }
+      if (themeToggle) {
+        themeToggle.textContent = nextTheme === 'dark' ? 'Light' : 'Dark';
+      }
+    }
+
     function setScreen(screenName) {
       state.screen = screenName;
       Object.entries(screens).forEach(([key, screen]) => {
@@ -1157,7 +1812,7 @@
 
     function openCountry(countryId) {
       state.selectedCountry = countryId;
-      state.selectedCategory = 'malls';
+      state.selectedCategory = CATEGORY_TABS[0].id;
       state.placeSearch = '';
       placeSearchInput.value = '';
       setScreen('places');
@@ -1193,7 +1848,7 @@
     }
 
     function getSelectedPlace() {
-      return ['malls', 'cafe', 'restaurant']
+      return CATEGORY_TABS.map((tab) => tab.id)
         .flatMap((key) => (placesByCountry[state.selectedCountry]?.[key] || []))
         .find((place) => place.id === state.selectedPlaceId) || null;
     }
@@ -1283,11 +1938,10 @@
     }
 
     function renderTabs() {
-      const tabs = [
-        { id: 'malls', label: t('malls') },
-        { id: 'cafe', label: t('cafe') },
-        { id: 'restaurant', label: t('restaurant') }
-      ];
+      const tabs = CATEGORY_TABS.map((tab) => ({
+        id: tab.id,
+        label: t(tab.labelKey)
+      }));
 
       document.getElementById('category-tabs').innerHTML = tabs.map((tab) => `
         <button class="tab-button ${state.selectedCategory === tab.id ? 'active' : ''}" type="button" data-tab-id="${tab.id}">
@@ -1515,6 +2169,15 @@
       state.language = state.language === 'en' ? 'ar' : 'en';
       render();
     });
+
+    themeToggle.addEventListener('click', () => {
+      const nextTheme = state.theme === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+      window.localStorage.setItem(THEME_STORAGE_KEY, nextTheme);
+    });
+
+    const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+    applyTheme(savedTheme === 'light' ? 'light' : 'dark');
 
     render();
 
