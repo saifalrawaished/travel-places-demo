@@ -364,10 +364,14 @@
     }
 
     .tabs {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      display: flex;
       gap: 8px;
-      margin-bottom: 16px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
+      padding-bottom: 2px;
+      margin-bottom: 12px;
     }
 
     .tab-button {
@@ -381,9 +385,54 @@
       font-weight: 700;
       cursor: pointer;
       transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+      white-space: nowrap;
+      flex: 0 0 auto;
+      scroll-snap-align: start;
     }
 
     .tab-button.active {
+      background: var(--chip-active);
+      color: var(--chip-active-text);
+      border-color: transparent;
+    }
+
+    .filter-row-label {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    .subcategory-filters {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 8px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      scroll-snap-type: x proximity;
+      padding-bottom: 2px;
+      margin: 0 0 16px;
+    }
+
+    .subfilter-button {
+      appearance: none;
+      border: 1px solid var(--line);
+      background: var(--chip);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+      white-space: nowrap;
+      flex: 0 0 auto;
+      scroll-snap-align: start;
+    }
+
+    .subfilter-button.active {
       background: var(--chip-active);
       color: var(--chip-active-text);
       border-color: transparent;
@@ -935,7 +984,10 @@
           </svg>
           <input id="place-search" type="text" />
         </label>
+        <p id="main-categories-label" class="filter-row-label"></p>
         <div id="category-tabs" class="tabs"></div>
+        <p id="subcategories-label" class="filter-row-label"></p>
+        <div id="subcategory-filters" class="subcategory-filters"></div>
       </div>
       <div id="places-content"></div>
     </section>
@@ -979,6 +1031,8 @@
         searchPlaces: 'Search places',
         noResults: 'No results found.',
         noResultsCopy: 'Try another search term.',
+        placesSummaryLabel: 'Places',
+        subcategoriesSummaryLabel: 'Subcategories',
         touristAttraction: 'Tourist attraction',
         cafe: 'Cafe',
         restaurant: 'Restaurant',
@@ -999,7 +1053,14 @@
         countrySoonCopy: 'Only Kuwait is populated in this first demo.',
         demoNote: 'Middle East and Kuwait are the active demo flow right now.',
         starsOutOfFive: 'out of 5 stars',
-        locationCount: 'locations'
+        locationCount: 'locations',
+        malls: 'Malls',
+        parks: 'Parks',
+        heritageSites: 'Heritage Sites',
+        outdoorPlaces: 'Outdoor Places',
+        japaneseRestaurants: 'Japanese Restaurants',
+        steakhousePremiumBeef: 'Steakhouse / Premium Beef',
+        breakfastDesserts: 'Breakfast & Desserts'
       },
       ar: {
         appLabel: 'أماكن السفر',
@@ -1019,6 +1080,8 @@
         searchPlaces: 'ابحث عن مكان',
         noResults: 'لا توجد نتائج.',
         noResultsCopy: 'جرّب كلمة بحث مختلفة.',
+        placesSummaryLabel: 'الأماكن',
+        subcategoriesSummaryLabel: 'الفئات الفرعية',
         touristAttraction: 'معالم سياحية',
         cafe: 'مقاهي',
         restaurant: 'مطاعم',
@@ -1039,7 +1102,14 @@
         countrySoonCopy: 'الكويت فقط هي المفعلة في النسخة الأولى.',
         demoNote: 'الشرق الأوسط والكويت هما مسار النسخة التجريبية الحالي.',
         starsOutOfFive: 'من 5 نجوم',
-        locationCount: 'مواقع'
+        locationCount: 'مواقع',
+        malls: 'مولات',
+        parks: 'حدائق',
+        heritageSites: 'مواقع تراثية',
+        outdoorPlaces: 'أماكن خارجية',
+        japaneseRestaurants: 'مطاعم يابانية',
+        steakhousePremiumBeef: 'ستيك هاوس / لحوم فاخرة',
+        breakfastDesserts: 'فطور وحلويات'
       }
     };
 
@@ -1078,8 +1148,8 @@
             nameAr: "الأفنيوز",
             logo: "assets/places/tourist_attraction/the_avenues/the_avenues_logo.png",
             rating: 4.6,
-            description: "Kuwait's largest shopping and lifestyle destination with retail, dining, entertainment, and hotels.",
-            descriptionAr: "أكبر وجهة تسوق ونمط حياة في الكويت، تضم متاجر ومطاعم وترفيه وفنادق.",
+            description: "The Avenues is one of Kuwait's most iconic shopping, dining, and lifestyle landmarks, designed as far more than a conventional mall. Spanning a vast built-up area with multiple themed districts, it brings together international and local brands, luxury fashion, everyday retail, cafes, restaurants, cinemas, entertainment, and hospitality in one polished destination. Its scale is a major part of the experience, with a wide variety of stores, dining options, parking facilities, and nearby hotels, making it a convenient choice for residents, tourists, families, and business visitors alike. The Avenues is especially appealing for visitors who want to experience Kuwait's modern urban lifestyle in a single place, whether for shopping, dining, walking through architecturally distinct zones, or spending a full day indoors in comfort.",
+            descriptionAr: "يُعدّ الأفنيوز واحداً من أبرز معالم التسوق ونمط الحياة في الكويت، فهو ليس مجرد مجمع تجاري تقليدي، بل وجهة متكاملة تجمع بين التسوق والمطاعم والترفيه والضيافة ضمن تجربة حضرية راقية. يمتد المشروع على مساحة كبيرة ويضم مناطق متعددة ذات طابع معماري مختلف، إلى جانب مجموعة واسعة من المتاجر والمطاعم والمقاهي والمرافق الترفيهية، مما يجعله مناسباً للزوار من العائلات والسياح والمقيمين ورجال الأعمال. ويمنح الأفنيوز زواره تجربة متنوعة تشمل العلامات العالمية والمحلية، الأزياء الفاخرة، السينما، والأنشطة الترفيهية في بيئة مريحة ومنظمة. لذلك يُعتبر الأفنيوز وجهة مثالية لاكتشاف الجانب العصري من الكويت وقضاء يوم كامل في أجواء متكاملة.",
             website: "https://www.the-avenues.com/",
             locations: [
               {
@@ -1098,8 +1168,8 @@
             nameAr: "مروج",
             logo: "assets/places/tourist_attraction/murouj/murouj_logo.png",
             rating: 4.6,
-            description: "Outdoor lifestyle destination in Subhan known for restaurants, cafes, leisure, and a family-friendly atmosphere.",
-            descriptionAr: "وجهة خارجية في صبحان معروفة بالمطاعم والمقاهي والأنشطة والأجواء العائلية.",
+            description: "Murouj is a relaxed outdoor lifestyle destination in the Subhan area, known for combining dining, leisure, entertainment, greenery, and a welcoming family atmosphere. It offers a more open-air and social experience than a traditional indoor mall, with a curated mix of restaurants and cafes that range from local Kuwaiti flavours to international dining concepts. Murouj is especially suited for evening visits, casual meetups, family outings, and leisurely meals, with landscaped surroundings that give the place a calm and pleasant feel. Its family appeal is strengthened by children's attractions, play areas, seasonal activities, and interactive experiences that make it enjoyable for younger visitors as well as adults. Overall, Murouj works well as a laid-back destination for people who want good food, outdoor ambience, and family-friendly entertainment in one place.",
+            descriptionAr: "مروج هي وجهة خارجية مريحة في منطقة صبحان تجمع بين المطاعم والمقاهي والترفيه والمساحات الخضراء ضمن أجواء عائلية هادئة. تتميز بطابع مفتوح واجتماعي يجعلها مختلفة عن المجمعات التجارية المغلقة، حيث يمكن للزوار الاستمتاع بتجربة طعام متنوعة تشمل النكهات الكويتية والمطابخ العالمية. تُعد مروج خياراً مناسباً للزيارات المسائية، اللقاءات العائلية، الجلسات الهادئة، وقضاء وقت ممتع في الهواء الطلق وسط تنسيق جميل للممرات والمساحات الخضراء. كما تعزز الوجهة طابعها العائلي من خلال مناطق لعب للأطفال وأنشطة موسمية وتجارب ترفيهية تناسب الصغار والكبار. باختصار، مروج وجهة مثالية لمن يبحث عن مطاعم مميزة وأجواء خارجية جميلة وتجربة مناسبة لجميع أفراد العائلة.",
             website: "https://www.themurouj.com/",
             locations: [
               {
@@ -1118,8 +1188,8 @@
             nameAr: "حديقة الشهيد",
             logo: "assets/places/tourist_attraction/al_shaheed_park/al_shaheed_park_logo.png",
             rating: 4.6,
-            description: "Kuwait's largest urban park, combining green spaces, walkways, museums, and cultural programming.",
-            descriptionAr: "أكبر حديقة حضرية في الكويت، تجمع بين المساحات الخضراء والممرات والمتاحف والأنشطة الثقافية.",
+            description: "Al Shaheed Park is one of Kuwait's most meaningful public spaces, blending nature, culture, history, and recreation in the heart of Kuwait City. The park features landscaped gardens, walking paths, jogging tracks, open green areas, cultural facilities, museums, and peaceful spaces that allow visitors to enjoy the city from a calmer and more reflective perspective. It is a strong choice for visitors who want more than a typical sightseeing stop, offering opportunities to walk, take photos, relax, attend cultural programming, or learn more about Kuwait's history and identity. Its central location and polished design make it popular with residents and tourists, especially during cooler months and evenings, when the park becomes a peaceful escape from the city while still feeling connected to Kuwait's modern cultural life.",
+            descriptionAr: "تُعد حديقة الشهيد من أهم المساحات العامة في الكويت، حيث تجمع بين الطبيعة والثقافة والتاريخ والترفيه في قلب مدينة الكويت. تضم الحديقة حدائق منسقة، ممرات للمشي، مسارات للجري، مساحات خضراء مفتوحة، مرافق ثقافية، متاحف، وأماكن هادئة تمنح الزائر فرصة للاستمتاع بالمدينة من منظور أكثر هدوءاً وتأملاً. وتُعتبر الحديقة خياراً مثالياً للزوار الذين يبحثون عن تجربة مختلفة عن الوجهات التقليدية، سواء للمشي، التصوير، الاسترخاء، حضور الفعاليات الثقافية، أو التعرف على جانب من تاريخ الكويت وهويتها. وبفضل موقعها المركزي وتصميمها المتقن، أصبحت حديقة الشهيد وجهة محببة للمقيمين والسياح، خصوصاً في المساء وخلال الأشهر ذات الطقس المعتدل.",
             website: "https://shaheedpark.da.gov.kw/",
             locations: [
               {
@@ -1138,8 +1208,8 @@
             nameAr: "سوق المباركية",
             logo: "assets/places/tourist_attraction/souq_al_mubarakiya/souq_al_mubarakiya_logo.png",
             rating: 4.6,
-            description: "Historic traditional market in Kuwait City, known for shopping, heritage atmosphere, local food, and old Kuwait character.",
-            descriptionAr: "سوق تراثي تاريخي في مدينة الكويت، معروف بالتسوق والأجواء الشعبية والمطاعم والطابع الكويتي القديم.",
+            description: "Souq Al-Mubarakiya is one of Kuwait City's most atmospheric heritage destinations, offering a vivid glimpse into the country's traditional commercial life and old-city character. The souq is known for its shaded alleys, local shops, spice stalls, oud and perfume sellers, dates, sweets, textiles, traditional clothing, gold, souvenirs, fresh produce, fish, and small restaurants serving local and regional food. What makes Mubarakiya special is not only what visitors can buy, but the feeling of walking through a living market where heritage, food, bargaining, conversation, and everyday Kuwaiti culture meet. It is best experienced slowly: wandering through the lanes, stopping for tea or a traditional meal, exploring the smaller specialty markets, and absorbing the old-Kuwait atmosphere that makes it one of the most memorable stops for tourists and locals alike.",
+            descriptionAr: "يُعد سوق المباركية من أكثر الوجهات التراثية حيوية في مدينة الكويت، فهو يمنح الزائر لمحة أصيلة عن الحياة التجارية القديمة والطابع الشعبي للكويت. يشتهر السوق بأزقته المسقوفة، محلاته المحلية، دكاكين البهارات، العطور والعود، التمور، الحلويات، الأقمشة، الملابس التقليدية، الذهب، الهدايا، الخضار والفواكه، الأسماك، والمطاعم الصغيرة التي تقدم أكلات كويتية وخليجية وعربية. وما يميز المباركية ليس التسوق فقط، بل الإحساس بالمكان نفسه؛ سوق نابض يجمع بين التراث والطعام والمساومة والأحاديث اليومية وروح الكويت القديمة. وتكون زيارته أجمل عند التجول بهدوء بين الممرات، التوقف لشرب الشاي أو تناول وجبة شعبية، واكتشاف الأسواق الصغيرة المتخصصة التي تمنح الزائر تجربة ثقافية دافئة ومختلفة عن الوجهات الحديثة.",
             website: "https://souq-al-mubarakiya.com/",
             locations: [
               {
@@ -1158,8 +1228,8 @@
             nameAr: "360 مول",
             logo: "assets/places/tourist_attraction/360_mall/360_mall_logo.png",
             rating: 4.6,
-            description: "Premium lifestyle mall combining luxury retail, dining, leisure, sports, and hospitality.",
-            descriptionAr: "مول راقٍ يجمع بين التسوق الفاخر والمطاعم والترفيه والرياضة والضيافة.",
+            description: "360 Mall is a premium lifestyle destination in Kuwait that combines retail, dining, leisure, sports, entertainment, and hospitality in one refined setting. Strategically located on the Sixth Ring Road, it brings together luxury and premium brands, curated culinary experiences, cinemas, landscaped interiors, artistic design features, and major leisure attractions. The wider 360 destination includes facilities that appeal to shoppers, diners, sports visitors, eventgoers, and hotel guests, giving it a wider purpose than a standard shopping mall. Its atmosphere is polished, modern, and upscale, making it especially suitable for visitors who want luxury retail, refined dining, entertainment, and contemporary architecture in a compact yet high-end environment.",
+            descriptionAr: "يُعد 360 مول وجهة راقية لنمط الحياة في الكويت، حيث يجمع بين التسوق والمطاعم والترفيه والرياضة والضيافة ضمن بيئة عصرية أنيقة. يتميز بموقعه الاستراتيجي على طريق الدائري السادس، ويضم مزيجاً من العلامات الفاخرة والراقية، تجارب طعام متنوعة، دور سينما، تصاميم داخلية أنيقة، عناصر فنية مميزة، ومساحات مصممة بعناية تمنح الزائر شعوراً بالفخامة والراحة. كما تضم وجهة 360 مرافق تناسب المتسوقين ومحبي المطاعم والرياضة والفعاليات والضيوف القادمين للإقامة، مما يجعلها أكثر من مجرد مركز تسوق تقليدي. وبفضل طابعها العصري والراقي، تُعتبر 360 مول وجهة مثالية لمن يبحث عن تسوق فاخر، مطاعم مميزة، ترفيه حديث، وتجربة حضرية متكاملة في بيئة عالية الجودة.",
             website: "https://www.tamdeen.com/portfolio/360-mall",
             locations: [
               {
@@ -1180,8 +1250,8 @@
             nameAr: "وايت روباتا",
             logo: "assets/places/restaurant/white_robata/white_robata_logo.png",
             rating: 4.6,
-            description: "Contemporary Japanese robata restaurant at JACC with an upscale dining atmosphere.",
-            descriptionAr: "مطعم ياباني معاصر في مركز الشيخ جابر الثقافي بأجواء راقية.",
+            description: "White Robata is a contemporary Japanese dining destination at Sheikh Jaber Al Ahmad Cultural Centre, offering an upscale experience built around robatayaki-style grilling, refined presentation, and a stylish modern atmosphere. The restaurant combines the theatre of open-fire cooking with a menu inspired by Japanese flavours and creative contemporary touches, making it suitable for special dinners, elegant outings, and visitors looking for a polished culinary experience in one of Kuwait's most important cultural landmarks. Its setting at JACC adds to the appeal, giving guests the feeling of dining in a vibrant cultural district while enjoying carefully prepared dishes, sleek interiors, and a sophisticated yet energetic ambience.",
+            descriptionAr: "وايت روباتا هو مطعم ياباني معاصر يقع في مركز الشيخ جابر الأحمد الثقافي، ويقدم تجربة طعام راقية تتمحور حول أسلوب الروباتاياكي والشواء على النار مع تقديم أنيق وأجواء عصرية مميزة. يجمع المطعم بين الطابع المسرحي للطهي المفتوح والنكهات اليابانية بلمسات إبداعية حديثة، مما يجعله مناسباً للعشاء الخاص، الخروجات الراقية، والزوار الباحثين عن تجربة طعام مصقولة في واحدة من أبرز الوجهات الثقافية في الكويت. ويمنح موقعه في مركز جابر تجربة إضافية للزائر، حيث يلتقي الطعام الفاخر بالأجواء الثقافية والتصميم العصري في بيئة أنيقة وحيوية.",
             website: "https://www.whiterobata.com/",
             locations: [
               {
@@ -1200,8 +1270,8 @@
             nameAr: "روكا الكويت",
             logo: "assets/places/restaurant/roka_kuwait/roka_kuwait_logo.jpg",
             rating: 4.6,
-            description: "Modern Japanese robatayaki restaurant at Waldorf Astoria Kuwait in The Avenues district.",
-            descriptionAr: "مطعم ياباني حديث بأسلوب الروباتاياكي داخل والدورف أستوريا الكويت في منطقة الأفنيوز.",
+            description: "ROKA Kuwait is a modern Japanese robatayaki restaurant located at Waldorf Astoria Kuwait in The Avenues district, bringing the brand's signature energy, refined Japanese flavours, and charcoal-grill cooking style to Kuwait City. The restaurant focuses on dishes prepared around the robata grill, alongside sushi, sashimi, and contemporary Japanese plates designed for sharing in a stylish and social setting. Its interiors create a warm and elegant atmosphere with natural design elements and a relaxed indoor-terrace feel, making ROKA a strong choice for upscale lunches, dinners, celebrations, and visitors who want a sophisticated Japanese dining experience connected to one of Kuwait's leading luxury hotels and lifestyle destinations.",
+            descriptionAr: "روكا الكويت هو مطعم ياباني حديث بأسلوب الروباتاياكي يقع داخل والدورف أستوريا الكويت في منطقة الأفنيوز، ويقدم تجربة تجمع بين الطاقة المميزة للعلامة والنكهات اليابانية الراقية والطهي على شواية الفحم. يركز المطعم على الأطباق المحضّرة حول شواية الروباتا، إلى جانب السوشي والساشيمي وأطباق يابانية معاصرة مصممة للمشاركة ضمن أجواء اجتماعية أنيقة. وتمنح التصاميم الداخلية للمكان إحساساً دافئاً وراقياً مع لمسات طبيعية وأجواء تشبه التراس الداخلي، مما يجعل روكا خياراً مناسباً للغداء والعشاء والمناسبات الخاصة وللزوار الباحثين عن تجربة يابانية فاخرة مرتبطة بإحدى أبرز وجهات الضيافة ونمط الحياة في الكويت.",
             website: "https://www.rokarestaurant.com/en/roka-the-avenues-kuwait",
             locations: [
               {
@@ -1220,8 +1290,8 @@
             nameAr: "بيف بار الكويت",
             logo: "assets/places/restaurant/beefbar_kuwait/beefbar_kuwait_logo.png",
             rating: 4.6,
-            description: "Luxury dining concept focused on premium beef, gourmet street food, and stylish contemporary interiors.",
-            descriptionAr: "مطعم فاخر يركز على اللحوم الفاخرة وأطباق الستريت فود الراقية ضمن أجواء عصرية.",
+            description: "Beefbar Kuwait is a luxury dining concept in Kuwait City focused on premium beef, gourmet street food, and a stylish cosmopolitan atmosphere. The restaurant brings the international Beefbar identity to Kuwait through a menu built around high-quality meat cuts, globally inspired comfort dishes, refined starters, and contemporary presentations that feel both elegant and approachable. It is designed for guests who enjoy a polished meat-focused dining experience without a stiff fine-dining mood, offering a balance between luxury ingredients, modern interiors, and a lively social setting. Beefbar is especially suitable for dinners, celebrations, business meals, and visitors looking for a fashionable restaurant with strong culinary identity and a focus on elevated meat dishes.",
+            descriptionAr: "بيف بار الكويت هو مطعم فاخر في مدينة الكويت يركز على اللحوم الممتازة وأطباق الستريت فود الراقية ضمن أجواء عصرية وأنيقة. ينقل المطعم هوية بيف بار العالمية إلى الكويت من خلال قائمة تعتمد على قطع لحم عالية الجودة، أطباق مريحة مستوحاة من مطابخ مختلفة حول العالم، مقبلات راقية، وتقديم معاصر يجمع بين الفخامة والبساطة. صُمم المكان للضيوف الذين يحبون تجربة طعام تتمحور حول اللحوم بطريقة أنيقة من دون طابع رسمي مبالغ فيه، حيث يجمع بين المكونات الفاخرة والتصميم الحديث والأجواء الاجتماعية الحيوية. ويُعد بيف بار خياراً مناسباً للعشاء، المناسبات، اجتماعات العمل، والزوار الباحثين عن مطعم عصري له هوية واضحة وتجربة مميزة في أطباق اللحوم الراقية.",
             website: "https://beefbar.com/kuwait/",
             locations: [
               {
@@ -1240,8 +1310,8 @@
             nameAr: "كوكاو روم",
             logo: "assets/places/restaurant/cocoa_room/cocoa_room_logo.png",
             rating: 4.6,
-            description: "Stylish Kuwait restaurant known for breakfast, desserts, hot chocolate, and visually polished presentation.",
-            descriptionAr: "مطعم كويتي أنيق معروف بالفطور والحلويات والشوكولاتة الساخنة وتقديمه المميز.",
+            description: "Cocoa Room is a stylish Kuwaiti restaurant known for its elegant atmosphere, creative breakfast dishes, polished presentation, desserts, and signature hot chocolate. Inspired by cocoa culture and designed with contemporary interiors, the restaurant places strong emphasis on food as a visual experience, making each dish feel carefully composed and photo-worthy. Its menu moves comfortably from breakfast and brunch to lunch, dinner, drinks, pastries, and desserts, with highlights such as pancakes, waffles, chocolate desserts, specialty hot chocolates, and refined comfort dishes. Cocoa Room is especially appealing for guests who want a chic yet relaxed dining experience, whether for a morning meal, a sweet treat, a casual lunch, or a polished outing with friends and family.",
+            descriptionAr: "كوكاو روم هو مطعم كويتي أنيق يشتهر بأجوائه الراقية، أطباق الفطور المبتكرة، التقديم الجميل، الحلويات، والشوكولاتة الساخنة المميزة. يستلهم المطعم هويته من عالم الكاكاو ويتميز بتصميم داخلي معاصر، مع اهتمام واضح بفكرة أن يكون الطعام تجربة بصرية بقدر ما هو تجربة ذوقية، حيث تبدو الأطباق مرتبة بعناية ومناسبة للتصوير. تتنوع قائمته بين الفطور والبرنش والغداء والعشاء والمشروبات والمعجنات والحلويات، مع خيارات مثل البانكيك، الوافل، حلويات الشوكولاتة، الشوكولاتة الساخنة الخاصة، وأطباق مريحة بلمسة راقية. ويُعد كوكاو روم مناسباً لمن يبحث عن تجربة طعام أنيقة ومريحة في الوقت نفسه، سواء لفطور صباحي، حلوى مميزة، غداء خفيف، أو جلسة جميلة مع الأصدقاء والعائلة.",
             website: "https://www.cocoaroom.co/",
             locations: [
               {
@@ -1260,8 +1330,8 @@
             nameAr: "أميموتو",
             logo: "assets/places/restaurant/amimoto/amimoto_logo.png",
             rating: 4.6,
-            description: "Japanese restaurant in Kuwait Towers serving Japanese dishes with a contemporary twist.",
-            descriptionAr: "مطعم ياباني في أبراج الكويت يقدم أطباقاً يابانية بلمسة عصرية.",
+            description: "Amimoto is a Japanese restaurant at Kuwait Towers, offering authentic Japanese dishes with a contemporary twist in one of the country's most recognizable landmarks. The restaurant serves lunch and dinner dishes prepared using Japanese culinary techniques, with a menu that reflects classic Japanese flavours while presenting them in a modern and refined way. Its location inside Kuwait Towers gives the dining experience a special sense of place, making it attractive not only for the food but also for the setting, views, and connection to a major Kuwaiti icon. Amimoto is a good choice for guests who want Japanese cuisine in a memorable location, whether for a relaxed lunch, an elegant dinner, or a tourist-friendly meal that combines dining with one of Kuwait's best-known attractions.",
+            descriptionAr: "أميموتو هو مطعم ياباني يقع في أبراج الكويت، ويقدم أطباقاً يابانية أصيلة بلمسة عصرية داخل واحد من أشهر معالم البلاد. يقدم المطعم أطباق الغداء والعشاء باستخدام تقنيات من المطبخ الياباني، مع قائمة تعكس النكهات اليابانية الكلاسيكية بطريقة حديثة وراقية. ويمنح موقعه داخل أبراج الكويت التجربة طابعاً خاصاً، فالجاذبية لا تقتصر على الطعام فقط، بل تشمل أيضاً المكان والإطلالة والارتباط بأحد أبرز رموز الكويت. لذلك يُعد أميموتو خياراً مناسباً لمن يرغب في تناول المطبخ الياباني في موقع لا يُنسى، سواء لغداء هادئ، عشاء أنيق، أو تجربة مناسبة للسياح تجمع بين الطعام وزيارة أحد أشهر معالم الكويت.",
             website: "https://restaurants.kuwaittowers.com/",
             locations: [
               {
@@ -1282,8 +1352,8 @@
             nameAr: "٪ أرابيكا",
             logo: "assets/places/cafe/arabica/arabica_logo.png",
             rating: 4.6,
-            description: "Kyoto-born specialty coffee brand known for espresso drinks, design-led interiors, and strong visual identity.",
-            descriptionAr: "علامة قهوة مختصة انطلقت من كيوتو، معروفة بالإسبريسو والتصميم المميز والهوية البصرية القوية.",
+            description: "% Arabica is a Japanese specialty coffee brand with strong Kyoto design roots, known for its clean visual identity, minimalist interiors, and focus on high-quality espresso-based drinks. In Kuwait, its cafes have become popular urban coffee stops for people who appreciate both the taste of coffee and the atmosphere around it. The Arraya Plaza branch stands out for its downtown setting, architectural details, outdoor seating, and calm garden-like surroundings between the city's towers, making it a stylish place for a quick coffee, a casual meeting, or a relaxed pause during a busy day. With its simple branding, bright interiors, and globally recognizable coffee culture, % Arabica offers a polished cafe experience that feels modern, elegant, and easy to enjoy.",
+            descriptionAr: "٪ أرابيكا هي علامة قهوة مختصة ذات جذور تصميمية يابانية مرتبطة بكيوتو، وتشتهر بهويتها البصرية النظيفة، تصاميمها البسيطة، وتركيزها على مشروبات الإسبريسو والقهوة عالية الجودة. في الكويت، أصبحت فروعها من الوجهات المحببة لمحبي القهوة الذين يهتمون بالطعم وبالأجواء في الوقت نفسه. يتميز فرع الراية بلازا بموقعه في قلب المدينة، تفاصيله المعمارية، جلساته الخارجية، والأجواء الهادئة المحاطة بالمساحات الخضراء بين الأبراج، مما يجعله مكاناً مناسباً لقهوة سريعة، اجتماع بسيط، أو استراحة مريحة خلال اليوم. وبفضل علامتها البصرية الواضحة وتصميمها العصري، تقدم ٪ أرابيكا تجربة مقهى أنيقة وسهلة ومناسبة لمحبي القهوة المختصة.",
             website: "https://arabica.com/en/location/arabica-kuwait-arraya-plaza/",
             locations: [
               {
@@ -1302,8 +1372,8 @@
             nameAr: "كاريبو كوفي",
             logo: "assets/places/cafe/caribou/caribou_coffee_logo.png",
             rating: 4.6,
-            description: "International coffee chain with broad branch coverage in Kuwait and a menu of coffee, snacks, and desserts.",
-            descriptionAr: "سلسلة قهوة عالمية لها انتشار واسع في الكويت وتقدم القهوة والوجبات الخفيفة والحلويات.",
+            description: "Caribou Coffee is an international coffeehouse chain with a friendly and approachable cafe style, offering a broad menu of handcrafted coffee drinks, blended beverages, teas, snacks, sandwiches, and desserts. In Kuwait, it is a familiar and convenient choice because of its wide branch presence and easy-going atmosphere, making it suitable for everyday coffee runs, casual catchups, study sessions, work breaks, and quick bites. The brand is built around a warm coffeehouse experience rather than a formal specialty cafe mood, so it works well for visitors who want comfort, consistency, and a relaxed place to sit. Whether someone is ordering a classic latte, a cold drink, or a light snack, Caribou Coffee provides a dependable cafe option with an international feel and a casual community atmosphere.",
+            descriptionAr: "كاريبو كوفي هي سلسلة مقاهي عالمية تتميز بأسلوب ودود وسهل، وتقدم قائمة واسعة من مشروبات القهوة المحضّرة يدوياً، المشروبات الباردة والمخلوطة، الشاي، الوجبات الخفيفة، الساندويتشات، والحلويات. في الكويت، تُعد كاريبو خياراً مألوفاً ومريحاً بفضل انتشار فروعها وأجوائها البسيطة، مما يجعلها مناسبة لقهوة يومية سريعة، لقاءات غير رسمية، الدراسة، استراحات العمل، أو تناول وجبة خفيفة. تعتمد هوية المكان على تجربة مقهى دافئة ومريحة أكثر من كونها تجربة رسمية أو متخصصة جداً، لذلك تناسب الزوار الذين يبحثون عن الراحة والثبات وأجواء سهلة للجلوس. سواء كان الطلب لاتيه كلاسيكي، مشروب بارد، أو سناك خفيف، تقدم كاريبو كوفي تجربة موثوقة بطابع عالمي وأجواء اجتماعية مريحة.",
             website: "https://www.cariboucoffee.com/around-the-world/",
             locations: [
               {
@@ -1322,8 +1392,8 @@
             nameAr: "توبيز إستيت",
             logo: "assets/places/cafe/tobys/tobys_coffee_logo.png",
             rating: 4.6,
-            description: "Specialty coffee brand with multiple Kuwait locations, focused on espresso and coffee-forward cafe service.",
-            descriptionAr: "علامة قهوة مختصة لها عدة فروع في الكويت وتركز على الإسبريسو وتجربة القهوة المتخصصة.",
+            description: "Toby's Estate is a specialty coffee brand with multiple locations across Kuwait, focused on espresso, brewed coffee, and a coffee-forward cafe experience. The brand appeals to people who enjoy a more serious approach to coffee while still wanting a comfortable and modern place to sit, work, meet friends, or enjoy a light bite. Its Kuwait branches often combine polished interiors, a calm cafe rhythm, and a menu that highlights classic coffee drinks, iced options, desserts, and simple food items. Toby's Estate is a strong choice for visitors who want a specialty coffee experience that feels reliable, stylish, and accessible, whether for a morning espresso, an afternoon iced latte, or a casual stop during a day out in the city.",
+            descriptionAr: "توبيز إستيت هي علامة قهوة مختصة لها عدة فروع في الكويت، وتركز على الإسبريسو والقهوة المحضّرة وتجربة مقهى تتمحور حول جودة القهوة. تناسب العلامة الأشخاص الذين يفضلون القهوة المتخصصة بأسلوب جاد، لكنهم في الوقت نفسه يبحثون عن مكان مريح وعصري للجلوس أو العمل أو لقاء الأصدقاء أو تناول وجبة خفيفة. تجمع فروع توبيز إستيت في الكويت غالباً بين التصاميم الأنيقة، الأجواء الهادئة، وقائمة تشمل مشروبات القهوة الكلاسيكية، الخيارات الباردة، الحلويات، وبعض الأطباق الخفيفة. وتُعد توبيز إستيت خياراً مناسباً لمن يريد تجربة قهوة مختصة موثوقة وأنيقة وسهلة الوصول، سواء لإسبريسو صباحي، لاتيه بارد بعد الظهر، أو توقف بسيط خلال يوم في المدينة.",
             website: "https://kw.tobysestateme.com/",
             locations: [
               {
@@ -1342,8 +1412,8 @@
             nameAr: "دوز كافيه",
             logo: "assets/places/cafe/dose_cafe/dose_cafe_logo.png",
             rating: 4.6,
-            description: "Homegrown specialty coffee brand founded in Kuwait, now expanded across multiple branches.",
-            descriptionAr: "علامة قهوة مختصة كويتية المنشأ بدأت في الكويت وتوسعت إلى عدة فروع.",
+            description: "Dose Cafe is a homegrown Kuwaiti specialty coffee brand that began in Kuwait and has grown into a recognizable multi-branch cafe concept. It is known for its energetic identity, specialty coffee drinks, iced beverages, creative seasonal options, and casual menu of sweets and light food. The cafe has a youthful and modern feel, making it popular for quick coffee stops, relaxed meetups, takeaway drinks, and everyday visits. Dose is especially appealing to people who enjoy bold coffee flavours, signature drinks, and a local brand with a strong sense of personality. With its Kuwait roots and expanding presence, Dose Cafe represents the rise of local specialty coffee culture in a way that feels approachable, lively, and familiar.",
+            descriptionAr: "دوز كافيه هي علامة قهوة مختصة كويتية المنشأ بدأت في الكويت وتطورت لتصبح مفهوماً معروفاً بعدة فروع. تشتهر بهويتها الحيوية، مشروبات القهوة المختصة، المشروبات الباردة، الخيارات الموسمية المبتكرة، وقائمة بسيطة من الحلويات والأطباق الخفيفة. يتميز المقهى بطابع شبابي وعصري يجعله مناسباً للقهوة السريعة، اللقاءات البسيطة، الطلبات الخارجية، والزيارات اليومية. ويجذب دوز الأشخاص الذين يحبون نكهات القهوة الواضحة، المشروبات الخاصة، والعلامات المحلية ذات الشخصية القوية. وبفضل جذوره الكويتية وانتشاره المتزايد، يعكس دوز كافيه تطور ثقافة القهوة المختصة المحلية بطريقة قريبة من الناس وحيوية ومألوفة.",
             website: "https://dosecafe.limetray.com/",
             locations: [
               {
@@ -1362,8 +1432,8 @@
             nameAr: "كاف",
             logo: "assets/places/cafe/caf_cafe/caf_cafe_logo.png",
             rating: 4.6,
-            description: "Kuwait-born specialty coffee concept centered on crafted coffee and a modern cafe experience.",
-            descriptionAr: "مفهوم كويتي للقهوة المختصة يركز على جودة التحضير وتجربة مقهى عصرية.",
+            description: "CAF Cafe is a Kuwait-born specialty coffee concept built around crafted coffee, modern design, and a refined social cafe experience. Starting from a local concept and growing into a multi-branch destination, CAF focuses on the full coffee journey from bean to cup, with drinks that include espresso classics, brewed coffee, cold coffee options, signature lattes, refreshments, and light food. Its cafes are known for sleek minimalist interiors, tonal design, and a polished atmosphere that feels both stylish and welcoming. CAF is a good choice for visitors who want a modern Kuwaiti cafe with strong branding, consistent coffee quality, and a setting that works for conversations, quick stops, casual work sessions, or relaxed outings with friends.",
+            descriptionAr: "كاف هو مفهوم كويتي للقهوة المختصة يقوم على القهوة المحضّرة بعناية، التصميم العصري، وتجربة مقهى اجتماعية راقية. بدأ كمفهوم محلي ثم تطور إلى وجهة متعددة الفروع، مع تركيز واضح على رحلة القهوة من الحبة إلى الكوب، من خلال مشروبات تشمل الإسبريسو، القهوة المحضّرة، الخيارات الباردة، اللاتيه المميز، المشروبات المنعشة، وبعض الوجبات الخفيفة. تتميز فروع كاف بتصاميم بسيطة وأنيقة، ألوان هادئة، وأجواء مصقولة تجمع بين العصرية والترحيب. ويُعد كاف خياراً مناسباً لمن يبحث عن مقهى كويتي حديث بهوية قوية، جودة قهوة ثابتة، ومكان يناسب الأحاديث، التوقف السريع، العمل الخفيف، أو الخروج الهادئ مع الأصدقاء.",
             website: "https://www.ordercaf.com/",
             locations: [
               {
@@ -1386,8 +1456,8 @@
             typeAr: "بانزين",
             logo: "assets/places/service/oula_fuel_station/oula_fuel_station_logo.png",
             rating: 4.6,
-            description: "Major Kuwait fuel-station brand offering refueling and station services.",
-            descriptionAr: "علامة محطات وقود رئيسية في الكويت تقدم خدمات التزود بالوقود والخدمات المصاحبة.",
+            description: "Oula Fuel Station is one of Kuwait's major fuel-service brands, offering convenient refueling and station services for drivers across the country. It is designed around making everyday car stops quick, easy, and reliable, whether visitors are filling up their vehicle, using fuel-payment options, or accessing supporting services available at selected stations. Oula's identity is closely connected to practical mobility in Kuwait, serving residents, commuters, families, and visitors who need a dependable place to refuel during daily routes or longer drives. With its focus on service, convenience, and smoother payment solutions, Oula works as an essential stop for anyone moving around Kuwait by car.",
+            descriptionAr: "أولى للوقود هي واحدة من العلامات الرئيسية لخدمات الوقود في الكويت، وتوفر تجربة مريحة للتزود بالوقود وخدمات المحطات للسائقين في مختلف المناطق. صُممت محطاتها لتجعل التوقف اليومي بالسيارة أكثر سرعة وسهولة واعتمادية، سواء كان الزائر يرغب في تعبئة الوقود، استخدام خيارات الدفع الخاصة بالوقود، أو الاستفادة من الخدمات المصاحبة المتوفرة في بعض المحطات. ترتبط هوية أولى بحركة التنقل اليومية في الكويت، فهي تخدم المقيمين والموظفين والعائلات والزوار الذين يحتاجون إلى محطة موثوقة أثناء تنقلاتهم داخل المدينة أو على الطرق. وبفضل تركيزها على الخدمة والراحة وحلول الدفع الأسهل، تُعد أولى محطة أساسية لكل من يعتمد على السيارة في الكويت.",
             website: "https://oula1.com/",
             locations: [
               {
@@ -1406,10 +1476,10 @@
             nameAr: "باس للمواقف",
             type: "Parking",
             typeAr: "مصافط",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/service/pass_parking/pass_parking_logo.png",
             rating: 4.6,
-            description: "Kuwait smart parking system designed to make parking easier and more efficient.",
-            descriptionAr: "نظام مواقف ذكي من الكويت يهدف إلى تسهيل وتنظيم عملية الوقوف.",
+            description: "PASS Parking is a smart parking system from Kuwait designed to make parking more efficient, organized, and convenient for drivers. The service uses vehicle plate recognition and digital account features to simplify entry, exit, and payment, reducing the need for paper tickets, coins, cash, or unnecessary waiting. It is especially useful in busy destinations where parking can be time-consuming, helping visitors move more smoothly from arrival to departure. PASS is a practical service for people who want a faster and more modern parking experience, whether they are visiting malls, lifestyle destinations, business areas, or other supported locations around Kuwait.",
+            descriptionAr: "باس للمواقف هو نظام مواقف ذكي من الكويت يهدف إلى جعل تجربة الوقوف أكثر كفاءة وتنظيماً وسهولة للسائقين. يعتمد النظام على التعرف على لوحة المركبة والخصائص الرقمية داخل الحساب لتبسيط عملية الدخول والخروج والدفع، مما يقلل الحاجة إلى التذاكر الورقية أو العملات أو الدفع النقدي أو الانتظار غير الضروري. ويُعد مفيداً بشكل خاص في الوجهات المزدحمة التي قد تستغرق فيها عملية إيجاد موقف أو الخروج وقتاً أطول من المعتاد. يناسب باس الأشخاص الذين يبحثون عن تجربة مواقف أسرع وأكثر عصرية، سواء عند زيارة المجمعات التجارية أو الوجهات الترفيهية أو مناطق الأعمال أو المواقع المدعومة في الكويت.",
             website: "https://www.getpass.me/",
             locations: [
               {
@@ -1418,7 +1488,7 @@
                 nameAr: "باس للمواقف، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=PASS+parking+Kuwait",
-                images: []
+                images: ["assets/places/service/pass_parking/pass_parking_1.png", "assets/places/service/pass_parking/pass_parking_2.png", "assets/places/service/pass_parking/pass_parking_3.jpg"]
               }
             ]
           },
@@ -1428,10 +1498,10 @@
             nameAr: "أوتو 1",
             type: "Garage",
             typeAr: "كراج",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/service/auto1_garage/auto1_garage_logo.png",
             rating: 4.6,
-            description: "Vehicle service and tire center offering maintenance, tire fitting, balancing, and quick garage services.",
-            descriptionAr: "مركز خدمات سيارات وإطارات يقدم صيانة وتركيب إطارات وترصيص وخدمات سريعة.",
+            description: "AUTO1 Garage is a vehicle service and tire center in Kuwait offering practical maintenance support for drivers who need quick, reliable car care. The center focuses on essential automotive services such as tire fitting, balancing, alignment, oil and filter changes, and other quick garage solutions that help keep vehicles safe and ready for the road. It is especially suitable for everyday drivers who want efficient service without the long process of a full dealership visit. With its focus on tires, maintenance, and fast workshop support, AUTO1 is a useful stop for people who need dependable car servicing, whether for routine upkeep, tire replacement, or a quick check before daily driving.",
+            descriptionAr: "أوتو 1 هو مركز خدمات سيارات وإطارات في الكويت يقدم دعماً عملياً للسائقين الذين يحتاجون إلى صيانة سريعة وموثوقة. يركز المركز على الخدمات الأساسية للسيارات مثل تركيب الإطارات، الترصيص، ضبط الميزانية، تبديل الزيت والفلاتر، وخدمات الكراج السريعة التي تساعد في الحفاظ على جاهزية السيارة وسلامتها على الطريق. يُعد مناسباً بشكل خاص للسائقين الذين يرغبون في إنجاز صيانة ضرورية بكفاءة ومن دون الدخول في إجراءات طويلة مثل زيارات الوكالات. وبفضل تركيزه على الإطارات والصيانة والخدمة السريعة، يُعتبر أوتو 1 محطة مفيدة لمن يحتاج إلى عناية موثوقة بالسيارة، سواء للصيانة الدورية أو تغيير الإطارات أو فحص سريع قبل الاستخدام اليومي.",
             website: "https://theauto1.com/",
             locations: [
               {
@@ -1440,7 +1510,7 @@
                 nameAr: "أوتو 1، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=AUTO1+Kuwait",
-                images: []
+                images: ["assets/places/service/auto1_garage/auto1_garage_1.png", "assets/places/service/auto1_garage/auto1_garage_2.png", "assets/places/service/auto1_garage/auto1_garage_3.png", "assets/places/service/auto1_garage/auto1_garage_4.png"]
               }
             ]
           },
@@ -1450,10 +1520,10 @@
             nameAr: "المسجد الكبير",
             type: "Mosque",
             typeAr: "مسجد",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/service/grand_mosque/grand_mosque_logo.png",
             rating: 4.6,
-            description: "Kuwait's largest mosque and a major landmark in Kuwait City.",
-            descriptionAr: "أكبر مسجد في الكويت وأحد أبرز معالم مدينة الكويت.",
+            description: "The Grand Mosque is Kuwait's largest mosque and one of the most important religious and architectural landmarks in Kuwait City. Located near the historic heart of the capital, it serves as a major place of worship while also standing out for its impressive scale, Islamic design details, spacious prayer areas, and symbolic role in the country's religious life. The mosque is closely associated with national occasions, major prayers, and the spiritual identity of Kuwait, making it meaningful for both residents and visitors. For tourists, it offers a chance to appreciate Islamic architecture and Kuwaiti cultural heritage, while for worshippers it remains a central and respected space for prayer, reflection, and community gathering.",
+            descriptionAr: "المسجد الكبير هو أكبر مسجد في الكويت وأحد أهم المعالم الدينية والمعمارية في مدينة الكويت. يقع بالقرب من قلب العاصمة التاريخي، ويُعد مكاناً رئيسياً للعبادة، كما يتميز بحجمه الكبير، تفاصيله المعمارية الإسلامية، مساحات الصلاة الواسعة، ودوره الرمزي في الحياة الدينية في البلاد. يرتبط المسجد بالمناسبات الوطنية والصلوات الكبرى والهوية الروحية للكويت، مما يجعله مكاناً مهماً للمقيمين والزوار على حد سواء. وبالنسبة للسياح، يوفر المسجد فرصة للتعرف على جمال العمارة الإسلامية والتراث الثقافي الكويتي، بينما يظل بالنسبة للمصلين مساحة مركزية ومحترمة للصلاة والتأمل والاجتماع.",
             website: "https://eservices.awqaf.gov.kw/MinistryServicesGate/index",
             locations: [
               {
@@ -1462,7 +1532,7 @@
                 nameAr: "المسجد الكبير، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=Grand+Mosque+Kuwait+City",
-                images: []
+                images: ["assets/places/service/grand_mosque/grand_mosque_1.png", "assets/places/service/grand_mosque/grand_mosque_2.png", "assets/places/service/grand_mosque/grand_mosque_3.png", "assets/places/service/grand_mosque/grand_mosque_4.png"]
               }
             ]
           },
@@ -1472,10 +1542,10 @@
             nameAr: "خدمات الأفنيوز",
             type: "Restrooms / prayer / visitor services",
             typeAr: "حمام",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/service/the_avenues_services/the_avenues_services_logo.png",
             rating: 4.6,
-            description: "Visitor-support services at The Avenues including accessible toilets, prayer rooms, valet, and other conveniences.",
-            descriptionAr: "خدمات داعمة للزوار في الأفنيوز تشمل دورات المياه المهيأة وغرف الصلاة وخدمة صف السيارات وغيرها.",
+            description: "The Avenues Services support visitors throughout one of Kuwait's largest and busiest lifestyle destinations, making the overall experience smoother, more comfortable, and more accessible. These services include facilities such as accessible toilets, men's and women's prayer rooms, regular restrooms, valet service, wheelchairs and scooters, Wi-Fi, information desks, breastfeeding rooms, lost and found, digital wayfinding, ATMs, exchange services, emergency clinic access, and other conveniences designed to help different types of visitors. They are especially useful for families, elderly visitors, people with accessibility needs, tourists, and shoppers spending long hours inside the mall. By combining practical facilities with comfort-focused support, The Avenues Services make it easier for guests to navigate, rest, pray, park, and enjoy their visit with fewer interruptions.",
+            descriptionAr: "خدمات الأفنيوز تدعم الزوار داخل واحدة من أكبر وأكثر وجهات التسوق ونمط الحياة ازدحاماً في الكويت، حيث تجعل التجربة أكثر سهولة وراحة وتنظيماً. تشمل هذه الخدمات مرافق مثل دورات المياه المهيأة، غرف الصلاة للرجال والنساء، دورات المياه العامة، خدمة صف السيارات، الكراسي المتحركة والسكوترات، الواي فاي، مكاتب المعلومات، غرف الرضاعة، المفقودات، الإرشاد الرقمي، أجهزة الصراف الآلي، خدمات الصرافة، العيادة الطارئة، وغيرها من وسائل الراحة المصممة لتلبية احتياجات مختلف الزوار. وتُعد هذه الخدمات مفيدة بشكل خاص للعائلات، كبار السن، أصحاب الاحتياجات الخاصة، السياح، والمتسوقين الذين يقضون ساعات طويلة داخل المجمع. ومن خلال الجمع بين المرافق العملية والدعم المريح، تساعد خدمات الأفنيوز الزوار على التنقل، الراحة، الصلاة، صف السيارات، والاستمتاع بالزيارة بأقل قدر من التعطيل.",
             website: "https://www.the-avenues.com/kuwait/en/services",
             locations: [
               {
@@ -1484,7 +1554,7 @@
                 nameAr: "خدمات الأفنيوز، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=The+Avenues+services+Kuwait",
-                images: []
+                images: ["assets/places/service/the_avenues_services/the_avenues_services_1.png", "assets/places/service/the_avenues_services/the_avenues_services_2.png", "assets/places/service/the_avenues_services/the_avenues_services_3.png"]
               }
             ]
           }
@@ -1498,8 +1568,8 @@
             typeAr: "القفز من البرشوت",
             logo: "assets/places/activity/kuwait_skydive/kuwait_skydive_logo.png",
             rating: 4.6,
-            description: "Official skydiving center in Kuwait offering jumps and training experiences.",
-            descriptionAr: "المركز الرسمي للقفز المظلي في الكويت ويقدم تجارب القفز والتدريب.",
+            description: "Kuwait Skydive is a dedicated skydiving experience in Kuwait for visitors who want an adventurous and memorable activity beyond the usual city attractions. It offers the excitement of jumping from an aircraft with professional support, giving participants a rare chance to see Kuwait from a completely different perspective while experiencing the rush of freefall and the calm of parachute descent. The activity is especially suitable for thrill-seekers, adventure travelers, and people celebrating a special occasion or milestone. Because skydiving is a weather-dependent and safety-focused activity, it is best suited for visitors who plan ahead, check requirements carefully, and are comfortable with a high-adrenaline experience guided by trained professionals.",
+            descriptionAr: "القفز المظلي الكويت هو تجربة مخصصة لمحبي المغامرة في الكويت، ومناسب للزوار الذين يبحثون عن نشاط مختلف ولا يُنسى بعيداً عن الوجهات التقليدية. تمنح التجربة المشاركين فرصة القفز من الطائرة بدعم من مختصين، والاستمتاع بمشاهدة الكويت من زاوية مختلفة تماماً مع إحساس السقوط الحر ثم هدوء الهبوط بالمظلة. يُعد هذا النشاط مناسباً لمحبي الإثارة، المسافرين الباحثين عن المغامرات، أو من يرغبون في الاحتفال بمناسبة خاصة بطريقة مميزة. وبما أن القفز المظلي يعتمد على الطقس ويتطلب التزاماً كبيراً بإجراءات السلامة، فهو يناسب الزوار الذين يخططون مسبقاً، يراجعون الشروط بعناية، ويشعرون بالراحة تجاه تجربة مليئة بالحماس وتتم تحت إشراف محترفين.",
             website: "https://www.kuwaitskydiveco.com/",
             locations: [
               {
@@ -1518,10 +1588,10 @@
             nameAr: "سلسان لتأجير القوارب",
             type: "Boat rental",
             typeAr: "تأجير قارب",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/activity/silsan_boat_rental/silsan_boat_rental_logo.png",
             rating: 4.6,
-            description: "Boat-rental service for marine outings and leisure trips in Kuwait.",
-            descriptionAr: "خدمة لتأجير القوارب للرحلات البحرية والأنشطة الترفيهية في الكويت.",
+            description: "Silsan Boat Rental is a marine leisure service in Kuwait offering boat rentals for relaxing sea outings, family trips, gatherings with friends, and special occasions on the water. The experience is designed for visitors who want to enjoy Kuwait's coastline from a more private and comfortable setting, whether for a calm cruise, a scenic afternoon, or a memorable day at sea. Silsan offers a range of boats suitable for different group sizes and occasions, with an emphasis on comfort, leisure, and a polished boating experience. It is a strong choice for people who want to escape the city for a few hours, enjoy the sea breeze, take photos, celebrate an event, or experience Kuwait from the water in a relaxed and enjoyable way.",
+            descriptionAr: "سلسان لتأجير القوارب هي خدمة بحرية ترفيهية في الكويت توفر تأجير القوارب للرحلات الهادئة، الخروجات العائلية، تجمعات الأصدقاء، والمناسبات الخاصة على البحر. صُممت التجربة للزوار الذين يرغبون في الاستمتاع بساحل الكويت من أجواء أكثر خصوصية وراحة، سواء لرحلة بحرية هادئة، فترة استجمام بعد الظهر، أو يوم مميز على الماء. تقدم سلسان خيارات متعددة من القوارب تناسب أحجاماً مختلفة من المجموعات والمناسبات، مع تركيز على الراحة والمتعة وتجربة بحرية منظمة. وتُعد خياراً مناسباً لمن يريد الابتعاد عن أجواء المدينة لبضع ساعات، الاستمتاع بنسيم البحر، التقاط الصور، الاحتفال بمناسبة، أو اكتشاف الكويت من جهة البحر بطريقة مريحة وممتعة.",
             website: "https://silsanq8.com/",
             locations: [
               {
@@ -1530,7 +1600,7 @@
                 nameAr: "سلسان لتأجير القوارب، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=Silsan+Kuwait",
-                images: []
+                images: ["assets/places/activity/silsan_boat_rental/silsan_boat_rental_1.png", "assets/places/activity/silsan_boat_rental/silsan_boat_rental_2.png", "assets/places/activity/silsan_boat_rental/silsan_boat_rental_3.png"]
               }
             ]
           },
@@ -1540,10 +1610,10 @@
             nameAr: "ميادين للرماية",
             type: "Shooting",
             typeAr: "رماية",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/activity/mayadeen_shooting_ranges/mayadeen_shooting_ranges_logo.png",
             rating: 4.6,
-            description: "Kuwait shooting complex with multiple range types and training options.",
-            descriptionAr: "مجمع رماية في الكويت يضم أنواعاً متعددة من الميادين وخيارات تدريب متنوعة.",
+            description: "Mayadeen Shooting Ranges is a specialized shooting complex in Kuwait offering a structured and controlled environment for people interested in shooting sports and supervised training experiences. The facility includes different range types and training options, making it suitable for beginners who want an introduction to the sport as well as more experienced visitors who want to practice in a dedicated setting. Mayadeen's appeal comes from combining safety, discipline, instruction, and recreation in one organized venue. It is best suited for visitors looking for a focused indoor or range-based activity, especially those interested in precision, concentration, and trying a sport that requires responsibility and close attention to rules and supervision.",
+            descriptionAr: "ميادين للرماية هو مجمع متخصص للرماية في الكويت يوفر بيئة منظمة وخاضعة للرقابة للراغبين في تجربة رياضة الرماية أو التدريب عليها تحت إشراف مناسب. يضم المجمع أنواعاً مختلفة من الميادين وخيارات تدريب متنوعة، مما يجعله مناسباً للمبتدئين الذين يريدون التعرف على الرياضة، وكذلك للزوار الأكثر خبرة الذين يرغبون في ممارسة الرماية داخل مكان مخصص. تكمن جاذبية ميادين في الجمع بين السلامة والانضباط والتدريب والترفيه ضمن وجهة واحدة منظمة. ويُعد خياراً مناسباً لمن يبحث عن نشاط مركز ومختلف، خصوصاً للمهتمين بالدقة والتركيز وتجربة رياضة تتطلب مسؤولية والتزاماً واضحاً بالتعليمات والإشراف.",
             website: "https://www.mayadeen.com/ar/",
             locations: [
               {
@@ -1552,7 +1622,7 @@
                 nameAr: "ميادين للرماية، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=Mayadeen+shooting+Kuwait",
-                images: []
+                images: ["assets/places/activity/mayadeen_shooting_ranges/mayadeen_shooting_ranges_1.png", "assets/places/activity/mayadeen_shooting_ranges/mayadeen_shooting_ranges_2.png", "assets/places/activity/mayadeen_shooting_ranges/mayadeen_shooting_ranges_3.png"]
               }
             ]
           },
@@ -1562,10 +1632,10 @@
             nameAr: "حلبة الكويت موتور تاون للكارتينج",
             type: "Track",
             typeAr: "حلبة فورمولا",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/activity/kuwait_motor_town_karting_circuit/kuwait_motor_town_karting_circuit_logo.png",
             rating: 4.6,
-            description: "Karting experience at Kuwait Motor Town with rental sessions and track access.",
-            descriptionAr: "تجربة كارتينج في الكويت موتور تاون مع جلسات تأجير واستخدام للحلبة.",
+            description: "Kuwait Motor Town Karting Circuit offers an exciting karting experience within one of Kuwait's main motorsport destinations. The facility includes a rental karting circuit and a race kart circuit, giving visitors the chance to enjoy track driving in a controlled and energetic environment. It is especially appealing for friends, families with older children, motorsport fans, corporate groups, and anyone who wants a fast-paced activity without needing to own a racing vehicle. The karting experience combines speed, competition, and skill, while the wider Kuwait Motor Town setting adds a professional motorsport atmosphere. It is a great option for visitors looking for an active outing that feels sporty, social, and different from a typical mall or cafe visit.",
+            descriptionAr: "حلبة الكويت موتور تاون للكارتينج تقدم تجربة كارتينج ممتعة داخل واحدة من أبرز وجهات رياضة المحركات في الكويت. تضم الوجهة حلبة للكارتينج بالتأجير وحلبة مخصصة لسباقات الكارت، مما يمنح الزوار فرصة قيادة الكارت داخل بيئة منظمة وحماسية. تناسب التجربة الأصدقاء، العائلات مع الأبناء الأكبر سناً، محبي السيارات، المجموعات المؤسسية، وكل من يبحث عن نشاط سريع ومليء بالطاقة من دون الحاجة إلى امتلاك مركبة سباق. تجمع تجربة الكارتينج بين السرعة والمنافسة والمهارة، بينما تضيف أجواء الكويت موتور تاون طابعاً احترافياً مرتبطاً بعالم رياضة المحركات. وتُعد خياراً ممتازاً لمن يريد نشاطاً رياضياً واجتماعياً مختلفاً عن الزيارات التقليدية للمجمعات أو المقاهي.",
             website: "https://www.kmt.kw/racetrack/karting/",
             locations: [
               {
@@ -1574,7 +1644,7 @@
                 nameAr: "حلبة الكويت موتور تاون للكارتينج، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=Kuwait+Motor+Town+Karting",
-                images: []
+                images: ["assets/places/activity/kuwait_motor_town_karting_circuit/kuwait_motor_town_karting_circuit_1.png", "assets/places/activity/kuwait_motor_town_karting_circuit/kuwait_motor_town_karting_circuit_2.png", "assets/places/activity/kuwait_motor_town_karting_circuit/kuwait_motor_town_karting_circuit_3.png"]
               }
             ]
           },
@@ -1584,10 +1654,10 @@
             nameAr: "حجز الملاعب والساحات الرياضية",
             type: "Sports fields",
             typeAr: "ملاعب",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/activity/public_authority_for_sport_playgrounds/public_authority_for_sport_playgrounds_logo.png",
             rating: 4.6,
-            description: "Government booking service for sports grounds and playgrounds in Kuwait.",
-            descriptionAr: "خدمة حكومية لحجز الساحات والملاعب الرياضية في الكويت.",
+            description: "Public Authority for Sport Playgrounds is a government booking service that helps users reserve sports yards and playgrounds in Kuwait through an official digital channel. The service is useful for people who want to organize casual matches, group sports activities, training sessions, or recreational games in a more structured way. Instead of relying only on informal arrangements, users can access a dedicated booking system connected to public sports facilities, making it easier to plan activities with friends, teams, or community groups. It is especially practical for football games, regular exercise groups, youth activities, and anyone looking for accessible sports spaces in Kuwait through an official service.",
+            descriptionAr: "حجز الملاعب والساحات الرياضية هي خدمة حكومية تقدمها الهيئة العامة للرياضة لمساعدة المستخدمين على حجز الساحات والملاعب الرياضية في الكويت عبر قناة رقمية رسمية. تُعد الخدمة مفيدة لمن يرغب في تنظيم مباريات ودية، أنشطة رياضية جماعية، حصص تدريبية، أو ألعاب ترفيهية بطريقة أكثر تنظيماً. وبدلاً من الاعتماد فقط على الترتيبات غير الرسمية، يمكن للمستخدمين الاستفادة من نظام حجز مرتبط بالمرافق الرياضية العامة، مما يسهل التخطيط للأنشطة مع الأصدقاء أو الفرق أو المجموعات المجتمعية. وتناسب هذه الخدمة بشكل خاص مباريات كرة القدم، مجموعات التمرين المنتظمة، أنشطة الشباب، وكل من يبحث عن مساحات رياضية متاحة في الكويت من خلال خدمة رسمية.",
             website: "https://e.gov.kw/sites/kgoenglish/Pages/eServices/Sport/BookingStadiums.aspx",
             locations: [
               {
@@ -1596,7 +1666,7 @@
                 nameAr: "حجز الملاعب والساحات الرياضية، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=sports+grounds+Kuwait",
-                images: []
+                images: ["assets/places/activity/public_authority_for_sport_playgrounds/public_authority_for_sport_playgrounds_1.png", "assets/places/activity/public_authority_for_sport_playgrounds/public_authority_for_sport_playgrounds_2.png", "assets/places/activity/public_authority_for_sport_playgrounds/public_authority_for_sport_playgrounds_3.png"]
               }
             ]
           }
@@ -1608,8 +1678,8 @@
             nameAr: "فندق فورسيزونز الكويت برج الشايع",
             logo: "assets/places/hotel/four_seasons_hotel_kuwait_at_burj_alshaya/four_seasons_hotel_kuwait_at_burj_alshaya_logo.png",
             rating: 4.6,
-            description: "Luxury city hotel in downtown Kuwait City with large rooms, rooftop dining, and easy access to central landmarks.",
-            descriptionAr: "فندق فاخر في وسط مدينة الكويت يتميز بغرف واسعة ومطاعم علوية وموقع قريب من المعالم الرئيسية.",
+            description: "Four Seasons Hotel Kuwait at Burj Alshaya is a luxury city hotel in the heart of Kuwait City, offering a refined urban-resort experience for business travelers, leisure guests, and visitors who want easy access to the capital's central landmarks. The hotel is known for its spacious rooms, polished Middle Eastern-inspired design, elegant public areas, rooftop dining, spa and leisure facilities, and a calm atmosphere that feels removed from the pace of the city while still being centrally located. Its setting in Burj Alshaya makes it especially suitable for guests who want a high-end stay close to business districts, cultural sites, shopping areas, and major city attractions. With its blend of luxury hospitality, large accommodations, destination restaurants, and resort-like comfort, Four Seasons Kuwait is a strong choice for travelers seeking a sophisticated stay in downtown Kuwait.",
+            descriptionAr: "فندق فورسيزونز الكويت برج الشايع هو فندق فاخر يقع في قلب مدينة الكويت، ويقدم تجربة إقامة راقية بطابع منتجع حضري تناسب رجال الأعمال والزوار والسياح الراغبين في الوصول بسهولة إلى أبرز معالم العاصمة. يشتهر الفندق بغرفه الواسعة، تصميمه الأنيق المستوحى من الطابع الشرق أوسطي، مساحاته العامة الراقية، مطاعمه العلوية، مرافق السبا والترفيه، وأجوائه الهادئة التي تمنح الضيف شعوراً بالاسترخاء رغم موقعه المركزي. ويجعل موقعه في برج الشايع منه خياراً مناسباً لمن يبحث عن إقامة فاخرة بالقرب من مناطق الأعمال والمواقع الثقافية ومراكز التسوق والمعالم الرئيسية في المدينة. وبفضل جمعه بين الضيافة الراقية، الغرف الكبيرة، المطاعم المميزة، والراحة الشبيهة بالمنتجعات، يُعد فورسيزونز الكويت خياراً مثالياً لإقامة فاخرة في وسط العاصمة.",
             website: "https://www.fourseasons.com/kuwait/",
             locations: [
               {
@@ -1626,10 +1696,10 @@
             id: "waldorf_astoria_kuwait",
             name: "Waldorf Astoria Kuwait",
             nameAr: "والدورف أستوريا الكويت",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/hotel/waldorf_astoria_kuwait/waldorf_astoria_kuwait_logo.png",
             rating: 4.6,
-            description: "Luxury hotel directly connected to The Avenues with spa, pool, and multiple restaurants.",
-            descriptionAr: "فندق فاخر متصل مباشرة بالأفنيوز ويضم سبا ومسبحاً وعدة مطاعم.",
+            description: "Waldorf Astoria Kuwait is a luxury hotel located at The Avenues, offering an elegant stay directly connected to one of Kuwait's most important shopping and lifestyle destinations. The hotel combines spacious rooms and suites with refined interiors, a sophisticated spa, outdoor pool, multiple dining options, and a calm luxury atmosphere that suits both short city stays and longer leisure visits. Its connection to The Avenues makes it especially convenient for guests who want shopping, restaurants, cafes, entertainment, and cinema access just steps away from their room. Waldorf Astoria Kuwait is a strong choice for travelers who want a polished five-star experience with the comfort of a luxury hotel and the convenience of being attached to a major lifestyle destination.",
+            descriptionAr: "والدورف أستوريا الكويت هو فندق فاخر يقع في الأفنيوز، ويقدم تجربة إقامة أنيقة متصلة مباشرة بواحدة من أهم وجهات التسوق ونمط الحياة في الكويت. يجمع الفندق بين الغرف والأجنحة الواسعة، التصاميم الداخلية الراقية، السبا الفاخر، المسبح الخارجي، خيارات الطعام المتعددة، والأجواء الهادئة التي تناسب الإقامات القصيرة والزيارات الترفيهية الطويلة. ويمنح اتصاله بالأفنيوز الضيوف سهولة الوصول إلى المتاجر والمطاعم والمقاهي والترفيه والسينما على بُعد خطوات من غرفهم. لذلك يُعد والدورف أستوريا الكويت خياراً مثالياً للمسافرين الذين يبحثون عن تجربة خمس نجوم مصقولة تجمع بين راحة الفندق الفاخر وسهولة الوصول إلى وجهة متكاملة لنمط الحياة.",
             website: "https://www.hilton.com/en/hotels/kwiwawa-waldorf-astoria-kuwait/",
             locations: [
               {
@@ -1638,7 +1708,7 @@
                 nameAr: "والدورف أستوريا الكويت، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=Waldorf+Astoria+Kuwait",
-                images: []
+                images: ["assets/places/hotel/waldorf_astoria_kuwait/waldorf_astoria_kuwait_1.png", "assets/places/hotel/waldorf_astoria_kuwait/waldorf_astoria_kuwait_2.png", "assets/places/hotel/waldorf_astoria_kuwait/waldorf_astoria_kuwait_3.png", "assets/places/hotel/waldorf_astoria_kuwait/waldorf_astoria_kuwait_4.png"]
               }
             ]
           },
@@ -1646,10 +1716,10 @@
             id: "jumeirah_messilah_beach_hotel_&_spa",
             name: "Jumeirah Messilah Beach Hotel & Spa",
             nameAr: "جميرا شاطئ المسيلة",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/hotel/jumeirah_messilah_beach_hotel_&_spa/jumeirah_messilah_beach_hotel_&_spa_logo.png",
             rating: 4.6,
-            description: "Beachfront luxury resort in Kuwait known for sea views, villas, spa, and family-friendly facilities.",
-            descriptionAr: "منتجع فاخر على البحر في الكويت معروف بإطلالاته البحرية والفلل والسبا والمرافق العائلية.",
+            description: "Jumeirah Messilah Beach Hotel & Spa is a beachfront luxury resort in Kuwait, designed for guests who want sea views, resort-style relaxation, spacious accommodation, and family-friendly facilities. Set along the water's edge away from the busiest parts of the city, the hotel offers rooms, suites, residences, and villas, along with landscaped outdoor spaces, pools, beach access, spa facilities, dining venues, and areas suited for both adults and children. It is especially appealing for families, couples, weekend guests, and travelers who want a more relaxed seaside stay rather than a purely city-based hotel experience. With its mix of beachside atmosphere, polished hospitality, private-feeling spaces, and leisure facilities, Jumeirah Messilah Beach is one of Kuwait's strongest choices for a luxury resort escape.",
+            descriptionAr: "جميرا شاطئ المسيلة هو منتجع فاخر على البحر في الكويت، مصمم للضيوف الذين يبحثون عن إطلالات بحرية، أجواء استجمام بطابع منتجعي، أماكن إقامة واسعة، ومرافق مناسبة للعائلات. يقع المنتجع على حافة البحر بعيداً عن أكثر مناطق المدينة ازدحاماً، ويضم غرفاً وأجنحة وشققاً فندقية وفللاً، إلى جانب مساحات خارجية منسقة، مسابح، وصول إلى الشاطئ، مرافق سبا، مطاعم، ومناطق تناسب الكبار والأطفال. ويُعد مناسباً بشكل خاص للعائلات، الأزواج، ضيوف نهاية الأسبوع، والمسافرين الذين يفضلون إقامة هادئة على البحر بدلاً من تجربة فندق داخل المدينة فقط. وبفضل مزيجه من الأجواء البحرية، الضيافة الراقية، المساحات التي تمنح إحساساً بالخصوصية، والمرافق الترفيهية، يُعتبر جميرا شاطئ المسيلة من أبرز خيارات الإقامة الفاخرة بطابع منتجعي في الكويت.",
             website: "https://www.jumeirah.com/en/stay/kuwait/jumeirah-messilah-beach-hotel-and-spa",
             locations: [
               {
@@ -1658,7 +1728,7 @@
                 nameAr: "جميرا شاطئ المسيلة، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=Jumeirah+Messilah+Beach+Kuwait",
-                images: []
+                images: ["assets/places/hotel/jumeirah_messilah_beach_hotel_&_spa/jumeirah_messilah_beach_hotel_&_spa_1.png", "assets/places/hotel/jumeirah_messilah_beach_hotel_&_spa/jumeirah_messilah_beach_hotel_&_spa_2.png", "assets/places/hotel/jumeirah_messilah_beach_hotel_&_spa/jumeirah_messilah_beach_hotel_&_spa_3.png"]
               }
             ]
           },
@@ -1666,10 +1736,10 @@
             id: "grand_hyatt_kuwait",
             name: "Grand Hyatt Kuwait",
             nameAr: "جراند حياة الكويت",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/hotel/grand_hyatt_kuwait/grand_hyatt_kuwait_logo.png",
             rating: 4.6,
-            description: "Luxury hotel integrated with 360 Mall, offering upscale rooms, spa, and destination dining.",
-            descriptionAr: "فندق فاخر متصل بـ 360 مول ويقدم غرفاً راقية وسبا وتجارب طعام مميزة.",
+            description: "Grand Hyatt Kuwait is a luxury hotel integrated with 360 Mall, offering a high-end stay that combines elegant accommodation, wellness facilities, destination dining, and direct access to one of Kuwait's major lifestyle and retail destinations. The hotel features upscale rooms and suites, Noor Spa, an indoor pool, fitness facilities, refined restaurants, and social spaces designed for both business and leisure travelers. Its connection to 360 Mall makes it especially convenient for guests who want shopping, dining, entertainment, sports facilities, and event venues close by without leaving the destination. Grand Hyatt Kuwait is well suited for travelers seeking a polished, modern hotel experience with strong dining options and the convenience of being part of a larger mixed-use lifestyle hub.",
+            descriptionAr: "جراند حياة الكويت هو فندق فاخر متصل بـ 360 مول، ويقدم تجربة إقامة راقية تجمع بين الغرف الأنيقة، مرافق العافية، تجارب الطعام المميزة، وسهولة الوصول إلى واحدة من أبرز وجهات التسوق ونمط الحياة في الكويت. يضم الفندق غرفاً وأجنحة فاخرة، سبا نور، مسبحاً داخلياً، مرافق لياقة، مطاعم راقية، ومساحات اجتماعية تناسب المسافرين بغرض العمل والترفيه. ويجعل اتصاله بـ 360 مول الإقامة أكثر سهولة للضيوف الذين يرغبون في الوصول إلى التسوق والمطاعم والترفيه والمرافق الرياضية ومواقع الفعاليات من دون مغادرة الوجهة. لذلك يُعد جراند حياة الكويت مناسباً لمن يبحث عن فندق عصري ومصقول مع خيارات طعام قوية وموقع مريح داخل وجهة متكاملة متعددة الاستخدامات.",
             website: "https://www.hyatt.com/grand-hyatt/en-US/kwigh-grand-hyatt-kuwait",
             locations: [
               {
@@ -1678,7 +1748,7 @@
                 nameAr: "جراند حياة الكويت، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=Grand+Hyatt+Kuwait",
-                images: []
+                images: ["assets/places/hotel/grand_hyatt_kuwait/grand_hyatt_kuwait_1.png", "assets/places/hotel/grand_hyatt_kuwait/grand_hyatt_kuwait_2.png", "assets/places/hotel/grand_hyatt_kuwait/grand_hyatt_kuwait_3.png", "assets/places/hotel/grand_hyatt_kuwait/grand_hyatt_kuwait_4.png"]
               }
             ]
           },
@@ -1686,10 +1756,10 @@
             id: "the_regency_hotel_kuwait",
             name: "The Regency Hotel Kuwait",
             nameAr: "فندق الريجنسي الكويت",
-            logo: "assets/brand/logo.png",
+            logo: "assets/places/hotel/the_regency_hotel_kuwait/the_regency_hotel_kuwait_logo.png",
             rating: 4.6,
-            description: "Five-star seaside hotel on the Arabian Gulf with elegant rooms and resort-style facilities.",
-            descriptionAr: "فندق خمس نجوم على الخليج العربي يتميز بغرف أنيقة ومرافق بطابع منتجعي.",
+            description: "The Regency Hotel Kuwait is a five-star seaside hotel on the Arabian Gulf, known for its elegant rooms, classic hospitality, and resort-style facilities in a calm coastal setting. The hotel offers a refined escape within Kuwait, combining sea-facing atmosphere, spacious rooms and suites, outdoor areas, pools, dining options, and event spaces that make it suitable for leisure stays, family visits, weddings, and special occasions. Its location along the Gulf gives guests a more relaxed experience than a central city hotel, while still keeping them within reach of Kuwait's main districts. With its blend of traditional elegance, seaside views, and polished service, The Regency is a strong option for visitors who want a comfortable luxury stay with a distinct coastal character.",
+            descriptionAr: "فندق الريجنسي الكويت هو فندق خمس نجوم على الخليج العربي، ويشتهر بغرفه الأنيقة، ضيافته الكلاسيكية، ومرافقه ذات الطابع المنتجعي ضمن أجواء ساحلية هادئة. يقدم الفندق تجربة راقية داخل الكويت تجمع بين الإطلالة البحرية، الغرف والأجنحة الواسعة، المساحات الخارجية، المسابح، خيارات الطعام، وقاعات المناسبات، مما يجعله مناسباً للإقامات الترفيهية، الزيارات العائلية، حفلات الزفاف، والمناسبات الخاصة. يمنح موقعه على الخليج الضيوف تجربة أكثر هدوءاً من فنادق وسط المدينة، مع بقائهم قريبين من المناطق الرئيسية في الكويت. وبفضل مزيجه من الأناقة التقليدية، الإطلالات البحرية، والخدمة المصقولة، يُعد الريجنسي خياراً مميزاً لمن يبحث عن إقامة فاخرة ومريحة بطابع ساحلي واضح.",
             website: "https://www.regency.com.kw/",
             locations: [
               {
@@ -1698,7 +1768,7 @@
                 nameAr: "فندق الريجنسي الكويت، الكويت",
                 rating: 4.6,
                 maps: "https://www.google.com/maps/search/?api=1&query=The+Regency+Kuwait",
-                images: []
+                images: ["assets/places/hotel/the_regency_hotel_kuwait/the_regency_hotel_kuwait_1.png", "assets/places/hotel/the_regency_hotel_kuwait/the_regency_hotel_kuwait_2.png", "assets/places/hotel/the_regency_hotel_kuwait/the_regency_hotel_kuwait_3.png", "assets/places/hotel/the_regency_hotel_kuwait/the_regency_hotel_kuwait_4.png"]
               }
             ]
           }
@@ -1722,6 +1792,20 @@
       { id: 'hotel', labelKey: 'hotel' }
     ];
 
+    const LOCKED_SUBCATEGORIES = {
+      tourist_attraction: [
+        { id: 'malls', labelKey: 'malls', placeIds: ['the_avenues', '360_mall'] },
+        { id: 'parks', labelKey: 'parks', placeIds: ['al_shaheed_park'] },
+        { id: 'heritage_sites', labelKey: 'heritageSites', placeIds: ['souq_al_mubarakiya'] },
+        { id: 'outdoor_places', labelKey: 'outdoorPlaces', placeIds: ['murouj'] }
+      ],
+      restaurant: [
+        { id: 'japanese_restaurants', labelKey: 'japaneseRestaurants', placeIds: ['white_robata', 'roka_kuwait', 'amimoto'] },
+        { id: 'steakhouse_premium_beef', labelKey: 'steakhousePremiumBeef', placeIds: ['beefbar_kuwait'] },
+        { id: 'breakfast_desserts', labelKey: 'breakfastDesserts', placeIds: ['cocoa_room'] }
+      ]
+    };
+
     const state = {
       language: 'en',
       theme: 'dark',
@@ -1729,6 +1813,7 @@
       selectedRegion: null,
       selectedCountry: null,
       selectedCategory: CATEGORY_TABS[0].id,
+      selectedSubcategories: {},
       selectedPlaceId: null,
       regionSearch: '',
       countrySearch: '',
@@ -1743,6 +1828,7 @@
     const splashScreen = document.getElementById('splash-screen');
     const themeColorMeta = document.querySelector('meta[name="theme-color"]');
     const THEME_STORAGE_KEY = 'tripora-theme';
+    const LANGUAGE_STORAGE_KEY = 'tripora-language';
 
     function t(key) {
       return translations[state.language][key] ?? key;
@@ -1840,6 +1926,7 @@
     function openCountry(countryId) {
       state.selectedCountry = countryId;
       state.selectedCategory = CATEGORY_TABS[0].id;
+      state.selectedSubcategories = {};
       state.placeSearch = '';
       placeSearchInput.value = '';
       setScreen('places');
@@ -1872,6 +1959,27 @@
     function getCurrentPlaces() {
       if (!state.selectedCountry || !placesByCountry[state.selectedCountry]) return [];
       return placesByCountry[state.selectedCountry][state.selectedCategory] || [];
+    }
+
+    function getSubcategoryConfig(categoryId) {
+      return LOCKED_SUBCATEGORIES[categoryId] || null;
+    }
+
+    function getSelectedSubcategoryIds(categoryId) {
+      return state.selectedSubcategories[categoryId] || [];
+    }
+
+    function filterPlacesByLockedSubcategories(places, categoryId) {
+      const config = getSubcategoryConfig(categoryId);
+      if (!config) return places;
+      const selectedIds = getSelectedSubcategoryIds(categoryId);
+      if (!selectedIds.length) return places;
+      const allowed = new Set(
+        config
+          .filter((item) => selectedIds.includes(item.id))
+          .flatMap((item) => item.placeIds)
+      );
+      return places.filter((place) => allowed.has(place.id));
     }
 
     function getSelectedPlace() {
@@ -1977,6 +2085,31 @@
       `).join('');
     }
 
+    function renderSubcategoryFilters() {
+      const container = document.getElementById('subcategory-filters');
+      const config = getSubcategoryConfig(state.selectedCategory);
+      if (!config) {
+        container.innerHTML = '';
+        return;
+      }
+
+      const selectedIds = getSelectedSubcategoryIds(state.selectedCategory);
+      container.innerHTML = config.map((item) => `
+        <button
+          class="subfilter-button ${selectedIds.includes(item.id) ? 'active' : ''}"
+          type="button"
+          data-subcategory-category="${state.selectedCategory}"
+          data-subcategory-id="${item.id}">
+          ${escapeHtml(t(item.labelKey))}
+        </button>
+      `).join('');
+    }
+
+    function buildLabelList(items) {
+      const separator = state.language === 'ar' ? '، ' : ', ';
+      return items.join(separator);
+    }
+
     function renderPlaces() {
       const country = getSelectedCountry();
       document.getElementById('back-to-countries-text').textContent = t('back');
@@ -1985,16 +2118,29 @@
       placeSearchInput.placeholder = t('searchPlaces');
 
       const tabs = document.getElementById('category-tabs');
+      const mainCategoriesLabel = document.getElementById('main-categories-label');
+      const subcategoriesLabel = document.getElementById('subcategories-label');
+      const subcategoryFilters = document.getElementById('subcategory-filters');
       const container = document.getElementById('places-content');
 
       if (!country) {
+        mainCategoriesLabel.textContent = '';
+        subcategoriesLabel.textContent = '';
+        mainCategoriesLabel.classList.add('hidden');
+        subcategoriesLabel.classList.add('hidden');
         tabs.innerHTML = '';
+        subcategoryFilters.innerHTML = '';
         container.innerHTML = '';
         return;
       }
 
       if (!country.active) {
+        mainCategoriesLabel.textContent = '';
+        subcategoriesLabel.textContent = '';
+        mainCategoriesLabel.classList.add('hidden');
+        subcategoriesLabel.classList.add('hidden');
         tabs.innerHTML = '';
+        subcategoryFilters.innerHTML = '';
         document.getElementById('places-hero-copy').textContent = t('placesCopySoon');
         container.innerHTML = `
           <div class="empty-state">
@@ -2008,8 +2154,21 @@
 
       document.getElementById('places-hero-copy').textContent = t('placesCopyActive');
       renderTabs();
+      renderSubcategoryFilters();
 
-      const filtered = getCurrentPlaces().filter((place) =>
+      mainCategoriesLabel.textContent = `${t('placesSummaryLabel')}:`;
+      mainCategoriesLabel.classList.remove('hidden');
+
+      const subcategoryConfig = getSubcategoryConfig(state.selectedCategory);
+      if (subcategoryConfig) {
+        subcategoriesLabel.textContent = `${t('subcategoriesSummaryLabel')}:`;
+        subcategoriesLabel.classList.remove('hidden');
+      } else {
+        subcategoriesLabel.textContent = '';
+        subcategoriesLabel.classList.add('hidden');
+      }
+
+      const filtered = filterPlacesByLockedSubcategories(getCurrentPlaces(), state.selectedCategory).filter((place) =>
         matchesQuery(state.placeSearch, [place.name, place.nameAr, place.description, place.descriptionAr])
       );
 
@@ -2165,6 +2324,19 @@
         return;
       }
 
+      const subcategoryButton = event.target.closest('[data-subcategory-id]');
+      if (subcategoryButton) {
+        const categoryId = subcategoryButton.dataset.subcategoryCategory;
+        const subcategoryId = subcategoryButton.dataset.subcategoryId;
+        const current = getSelectedSubcategoryIds(categoryId);
+        const next = current.includes(subcategoryId)
+          ? current.filter((id) => id !== subcategoryId)
+          : [...current, subcategoryId];
+        state.selectedSubcategories[categoryId] = next;
+        renderPlaces();
+        return;
+      }
+
       const placeButton = event.target.closest('[data-place-id]');
       if (placeButton) {
         openPlace(placeButton.dataset.placeId);
@@ -2194,6 +2366,7 @@
 
     languageToggle.addEventListener('click', () => {
       state.language = state.language === 'en' ? 'ar' : 'en';
+      window.localStorage.setItem(LANGUAGE_STORAGE_KEY, state.language);
       render();
     });
 
@@ -2204,7 +2377,10 @@
     });
 
     const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
-    applyTheme(savedTheme === 'light' ? 'light' : 'dark');
+    applyTheme(savedTheme === 'dark' ? 'dark' : 'light');
+
+    const savedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY);
+    state.language = savedLanguage === 'en' ? 'en' : 'ar';
 
     normalizeDemoRatings();
     render();
@@ -2220,6 +2396,7 @@
   </script>
 </body>
 </html>
+
 
 
 
